@@ -28,8 +28,9 @@ func (p Declaration) Ejecutar(ast *environment.AST, env interface{}, gen *genera
 
 	gen.AddComment("Agregando una declaracion")
 	newVar = env.(environment.Environment).SaveVariable(p.Id, p.Tipo)
-
+	println(p.Id)
 	if result.Type == environment.BOOLEAN {
+		print("ENTRO ACA")
 		//si no es temp (boolean)
 		newLabel := gen.NewLabel()
 		//add labels

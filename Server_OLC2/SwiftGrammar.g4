@@ -43,6 +43,7 @@ instruction returns [interfaces.Instruction inst]
 | function { $inst = $function.fun }
 | structCreation { $inst = $structCreation.dec }
 | whilestmt { $inst = $whilestmt.whiles }
+| forstmt { $inst = $forstmt.fors }
 ;
 
 structCreation returns[interfaces.Instruction dec]
@@ -125,6 +126,12 @@ elseif returns [interfaces.Instruction ifinst]
 
 whilestmt returns [interfaces.Instruction whiles]
 : WHILE expr LLAVEIZQ block LLAVEDER { $whiles =instructions.NewWhiles($WHILE.line, $WHILE.pos, $expr.e, $block.blk) }
+;
+
+forstmt returns [interfaces.Instruction fors]
+: FOR ID IN e1 = expr PUNTO PUNTO PUNTO e2=expr LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $ID.text, $e1.e,$e2.e,"nil", $block.blk) }
+| FOR GUIONB IN e1 = expr PUNTO PUNTO PUNTO e2=expr LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $GUIONB.text, $e1.e,$e2.e,"nil", $block.blk) }
+| FOR ID IN ope = (STRING|ID) LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $ID.text, nil,nil, $ope.text ,$block.blk ) }
 ;
 
 declarationstmt returns [interfaces.Instruction dec]

@@ -27,8 +27,7 @@ func (p Whiles) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 	var condicion, result environment.Value
 	var OutLvls []interface{}
 	condicion = p.Expresion.Ejecutar(ast, env, gen)
-
-	
+	fmt.Println("Condicion: ", condicion)
 
 	//*****************************************add true labels
 	for _, lvl := range condicion.TrueLabel {
@@ -56,7 +55,6 @@ func (p Whiles) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 		println("---->>>", lvl.(string))
 		gen.AddLabel(lvl.(string))
 	}
-	
 
 	return result
 }

@@ -1,5 +1,7 @@
 lexer grammar SwiftLexer;
 
+
+
 // --------------- Tokens
 // types
 INT:    'Int';
@@ -14,9 +16,27 @@ PRINT:  'print';
 IF:     'if';
 ELSE:   'else';
 WHILE:  'while';
+FOR:    'for';
+SWITCH:   'switch';
+CASE:      'case';
+DEFAULT:   'default';
+IN:     'in';
 VAR:    'var';
-FUNC:   'func';
+LET: 'let';
+BREAK: 'break';
+CONTINUE: 'continue';
+RETURN :  'return';
+GUARD : 'guard';
+APPEND: 'append';
+REMOVELAST: 'removeLast';
+REMOVE: 'remove';
+COUNT: 'count';
+ISEMPTY: 'isEmpty';
+AT: 'at';
+FUNC: 'func';
 STRUCT: 'struct';
+
+
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
@@ -49,6 +69,9 @@ CORDER:         ']';
 COMA:           ',';
 ARROW1:         '->';
 PUNTO:          '.';
+MODULO:         '%';
+GUIONB:         '_';
+
 
 // skip
 WHITESPACE: [ \\\r\n\t]+ -> skip;
@@ -59,4 +82,6 @@ fragment
 ESC_SEQ
     :   '\\' ('\\'|'@'|'['|']'|'.'|'#'|'+'|'-'|'!'|':'|' ')
     ;
+
+
 
