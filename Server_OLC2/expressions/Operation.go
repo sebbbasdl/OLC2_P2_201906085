@@ -100,7 +100,7 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				gen.AddComment("Concatenacion en suma string---FIN")
 
 				gen.Temp_Concat = temp3
-				
+
 				println("result 1 : ", gen.Temp_Concat)
 				//fmt.Println(val)
 				result = environment.NewValue(op1.Value+op2.Value, true, dominante)
@@ -256,6 +256,7 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 		}
 	case "==":
 		{
+			fmt.Println("----->", o.Op_izq)
 			op1 = o.Op_izq.Ejecutar(ast, env, gen)
 			op2 = o.Op_der.Ejecutar(ast, env, gen)
 			dominante = tabla_dominante[op1.Type][op2.Type]
@@ -271,9 +272,78 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				result.TrueLabel = append(result.TrueLabel, trueLabel)
 				result.FalseLabel = append(result.FalseLabel, falseLabel)
 				return result
-			} else if dominante == environment.BOOLEAN{
+			} else if dominante == environment.BOOLEAN {
+				gen.AddComment("Validacion entre dos BOOL")
+				println("-------EN BOOL------")
 
-			}else {
+				fmt.Println("op1T", op1.TrueLabel)
+				fmt.Println("op2T", op2.TrueLabel)
+				fmt.Println("op1F", op1.FalseLabel)
+				fmt.Println("op2F", op2.FalseLabel)
+
+				label1 := op1.TrueLabel[0]
+				label2 := op2.TrueLabel[0]
+				label3 := op1.FalseLabel[0]
+				label4 := op2.FalseLabel[0]
+
+				label5 := gen.NewLabel() //64
+				label6 := gen.NewLabel() //65
+				label7 := gen.NewLabel() //62
+				label8 := gen.NewLabel() //63
+
+				temp1 := gen.NewTemp()
+
+				gen.Code = append(gen.Code, label1, ":\n")
+				gen.AddExpression(temp1, "1", "", "")
+				gen.AddGoto(label5)
+				gen.Code = append(gen.Code, label3, ":\n")
+				gen.AddExpression(temp1, "0", "", "")
+				gen.AddLabel(label5)
+				println("->>>", gen.Temp_Label1)
+				println("->>>", gen.Temp_Label2)
+				println(label4.(string))
+				if gen.Temp_Label1 == "" || gen.Temp_Label2 == "" {
+					if(gen.Temp_Label1=="L2"){
+						println("primer if")
+						gen.Code = append(gen.Code, "goto", label2, ";\n")	
+						gen.Temp_Label1=""
+						gen.Temp_Label2=""
+					}else{
+						
+						println("else")
+						gen.Code = append(gen.Code, "goto", label4, ";\n")	
+						gen.Temp_Label1=""
+						gen.Temp_Label2=""
+					}
+				}else{
+					if(gen.Temp_Label2=="L3"){
+						gen.Code = append(gen.Code, "goto", label4, ";\n")
+						gen.Temp_Label1=""
+						gen.Temp_Label2=""
+					}else{
+						gen.Code = append(gen.Code, "goto", label2, ";\n")
+						gen.Temp_Label1=""
+						gen.Temp_Label2=""
+					}
+					
+				}
+				
+				gen.Code = append(gen.Code, label2, ":\n")
+				gen.AddExpression(temp1, temp1, "1", "+")
+				gen.AddGoto(label6)
+				gen.Code = append(gen.Code, label4, ":\n")
+				gen.AddExpression(temp1, temp1, "0", "+")
+				gen.AddLabel(label6)
+				gen.AddIf(temp1, "1", "!=", label7)
+				gen.AddGoto(label8)
+				//gen.AddLabel(label7)
+
+				result = environment.NewValue("", false, environment.BOOLEAN)
+				result.TrueLabel = append(result.TrueLabel, label7)
+				result.FalseLabel = append(result.FalseLabel, label8)
+				return result
+
+			} else {
 				ast.SetError("ERROR: No es posible comparar ==")
 			}
 		}

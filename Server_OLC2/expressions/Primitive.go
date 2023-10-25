@@ -52,11 +52,20 @@ func (p Primitive) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 		gen.AddComment("Primitivo bool")
 		trueLabel := gen.NewLabel()
 		falseLabel := gen.NewLabel()
+		
 		if p.Valor.(bool) {
+			gen.Temp_Label1 = trueLabel
 			gen.AddGoto(trueLabel)
+			//println("-->", trueLabel)
+			
 		} else {
+			gen.Temp_Label2 = falseLabel
 			gen.AddGoto(falseLabel)
+			//println("-->", falseLabel)
+			
 		}
+		
+		
 		result = environment.NewValue("", false, environment.BOOLEAN)
 		result.TrueLabel = append(result.TrueLabel, trueLabel)
 		result.FalseLabel = append(result.FalseLabel, falseLabel)

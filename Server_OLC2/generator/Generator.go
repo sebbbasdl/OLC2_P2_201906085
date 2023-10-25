@@ -19,6 +19,8 @@ type Generator struct {
 	Concat          bool
 	Temp_Concat     string
 	ConcatFlag      bool
+	Temp_Label1     string
+	Temp_Label2     string
 }
 
 func NewGenerator() Generator {

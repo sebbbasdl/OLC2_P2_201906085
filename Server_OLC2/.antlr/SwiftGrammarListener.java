@@ -114,6 +114,26 @@ public interface SwiftGrammarListener extends ParseTreeListener {
 	 */
 	void exitIfstmt(SwiftGrammarParser.IfstmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#elseiflist}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseiflist(SwiftGrammarParser.ElseiflistContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#elseiflist}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseiflist(SwiftGrammarParser.ElseiflistContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#elseif}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseif(SwiftGrammarParser.ElseifContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#elseif}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseif(SwiftGrammarParser.ElseifContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SwiftGrammarParser#declarationstmt}.
 	 * @param ctx the parse tree
 	 */
