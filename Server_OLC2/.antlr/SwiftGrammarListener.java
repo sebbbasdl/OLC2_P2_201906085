@@ -1,4 +1,4 @@
-// Generated from c://Users//Usuario//Documents//OLC2 EJEMPLOS 2DO PROYECTO//OLC2_SegundoSemestre_2023-main (3)//OLC2_SegundoSemestre_2023-main//Proyecto2//Server2//SwiftGrammar.g4 by ANTLR 4.13.1
+// Generated from c://Users//Usuario//Documents//OLC2_P2_201906085//Server_OLC2//SwiftGrammar.g4 by ANTLR 4.13.1
 
     import "Server2/interfaces"
     import "Server2/environment"

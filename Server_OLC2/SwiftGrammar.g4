@@ -42,6 +42,7 @@ instruction returns [interfaces.Instruction inst]
 | assignment { $inst = $assignment.ass }
 | function { $inst = $function.fun }
 | structCreation { $inst = $structCreation.dec }
+| whilestmt { $inst = $whilestmt.whiles }
 ;
 
 structCreation returns[interfaces.Instruction dec]
@@ -120,6 +121,10 @@ elseiflist returns [[]interface{} else_if_list]
 
 elseif returns [interfaces.Instruction ifinst]
 : ELSE IF expr LLAVEIZQ block LLAVEDER { $ifinst = instructions.NewIf($IF.line, $IF.pos, $expr.e, $block.blk, nil, nil) }
+;
+
+whilestmt returns [interfaces.Instruction whiles]
+: WHILE expr LLAVEIZQ block LLAVEDER { $whiles =instructions.NewWhiles($WHILE.line, $WHILE.pos, $expr.e, $block.blk) }
 ;
 
 declarationstmt returns [interfaces.Instruction dec]
