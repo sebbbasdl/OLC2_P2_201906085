@@ -125,6 +125,21 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				ast.SetError("ERROR: No es posible restar")
 			}
 		}
+	case "neg":
+		{
+			op1 = o.Op_izq.Ejecutar(ast, env, gen)
+			op2 = o.Op_der.Ejecutar(ast, env, gen)
+			dominante = tabla_dominante[op1.Type][op2.Type]
+
+			if dominante == environment.INTEGER || dominante == environment.FLOAT {
+				gen.AddExpression(newTemp, "0", op1.Value, "-")
+				result = environment.NewValue(newTemp, true, dominante)
+				result.IntValue = 0 - op2.IntValue
+				return result
+			} else {
+				ast.SetError("ERROR: No es posible restar")
+			}
+		}
 	case "*":
 		{
 			op1 = o.Op_izq.Ejecutar(ast, env, gen)
@@ -145,10 +160,15 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 			op2 = o.Op_der.Ejecutar(ast, env, gen)
 			dominante = tabla_dominante[op1.Type][op2.Type]
 			if dominante == environment.INTEGER || dominante == environment.FLOAT {
-				lvl1 := gen.NewLabel()
-				lvl2 := gen.NewLabel()
-
-				gen.AddIf(op2.Value, "0", "!=", lvl1)
+				lvl1 := gen.NewLabel() //70
+				lvl2 := gen.NewLabel() //71
+				lvl3 := gen.NewLabel() //72
+				//lvl4 := gen.NewLabel() //73
+				temp1 := gen.NewTemp() //82
+				temp2 := gen.NewTemp() //83
+				gen.AddIf(op2.Value, "0", "==", lvl1)
+				gen.AddGoto(lvl2)
+				gen.AddLabel(lvl1)
 				gen.AddPrintf("c", "77")
 				gen.AddPrintf("c", "97")
 				gen.AddPrintf("c", "116")
@@ -158,12 +178,15 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				gen.AddPrintf("c", "114")
 				gen.AddPrintf("c", "111")
 				gen.AddPrintf("c", "114")
-				gen.AddExpression(newTemp, "0", "", "")
-				gen.AddGoto(lvl2)
-				gen.AddLabel(lvl1)
-				gen.AddExpression(newTemp, op1.Value, op2.Value, "/")
+				gen.AddExpression(temp1, "0", "", "")
+				gen.AddGoto(lvl3)
 				gen.AddLabel(lvl2)
+				gen.AddExpression(newTemp, op1.Value, op2.Value, "/")
+				gen.AddLabel(lvl3)
+				gen.AddExpression(temp2, op1.Value, "1", "-")
+				gen.AddSetStack("(int)0", temp2)
 				result = environment.NewValue(newTemp, true, dominante)
+
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible Dividir")
@@ -303,31 +326,31 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				println("->>>", gen.Temp_Label2)
 				println(label4.(string))
 				if gen.Temp_Label1 == "" || gen.Temp_Label2 == "" {
-					if(gen.Temp_Label1=="L2"){
+					if gen.Temp_Label1 == "L2" {
 						println("primer if")
-						gen.Code = append(gen.Code, "goto", label2, ";\n")	
-						gen.Temp_Label1=""
-						gen.Temp_Label2=""
-					}else{
-						
-						println("else")
-						gen.Code = append(gen.Code, "goto", label4, ";\n")	
-						gen.Temp_Label1=""
-						gen.Temp_Label2=""
-					}
-				}else{
-					if(gen.Temp_Label2=="L3"){
-						gen.Code = append(gen.Code, "goto", label4, ";\n")
-						gen.Temp_Label1=""
-						gen.Temp_Label2=""
-					}else{
 						gen.Code = append(gen.Code, "goto", label2, ";\n")
-						gen.Temp_Label1=""
-						gen.Temp_Label2=""
+						gen.Temp_Label1 = ""
+						gen.Temp_Label2 = ""
+					} else {
+
+						println("else")
+						gen.Code = append(gen.Code, "goto", label4, ";\n")
+						gen.Temp_Label1 = ""
+						gen.Temp_Label2 = ""
 					}
-					
+				} else {
+					if gen.Temp_Label2 == "L3" {
+						gen.Code = append(gen.Code, "goto", label4, ";\n")
+						gen.Temp_Label1 = ""
+						gen.Temp_Label2 = ""
+					} else {
+						gen.Code = append(gen.Code, "goto", label2, ";\n")
+						gen.Temp_Label1 = ""
+						gen.Temp_Label2 = ""
+					}
+
 				}
-				
+
 				gen.Code = append(gen.Code, label2, ":\n")
 				gen.AddExpression(temp1, temp1, "1", "+")
 				gen.AddGoto(label6)

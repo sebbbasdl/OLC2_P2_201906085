@@ -33,15 +33,21 @@ func (p Whiles) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 	for _, lvl := range condicion.TrueLabel {
 		gen.AddLabel(lvl.(string))
 	}
-
+	gen.AddComment("WHILE")
 	for _, s := range p.Bloque {
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
 			if resInst != nil {
 				//agregando etiquetas de salida
+				
+
 				for _, lvl := range resInst.(environment.Value).OutLabel {
 					OutLvls = append(OutLvls, lvl)
+					fmt.Println("Outttt->> ", lvl)
+					gen.AddLabel(lvl.(string))
 				}
+			
+				
 			}
 		} else {
 			fmt.Println("Error en bloque")
@@ -55,6 +61,8 @@ func (p Whiles) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 		println("---->>>", lvl.(string))
 		gen.AddLabel(lvl.(string))
 	}
+
+	
 
 	return result
 }

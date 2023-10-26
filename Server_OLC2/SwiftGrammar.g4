@@ -135,8 +135,10 @@ forstmt returns [interfaces.Instruction fors]
 ;
 
 declarationstmt returns [interfaces.Instruction dec]
-: VAR ID D_PTS types IG expr  { $dec = instructions.NewDeclaration($VAR.line, $VAR.pos, $ID.text, $types.ty, $expr.e) }
-| VAR ID IG expr  { $dec = instructions.NewDeclaration($VAR.line, $VAR.pos, $ID.text, environment.STRUCT , $expr.e) }
+: VAR ID D_PTS types IG expr {$dec = instructions.NewDeclaration($VAR.line, $VAR.pos, $ID.text, $types.ty, $expr.e, false);}
+| VAR ID  IG expr {$dec = instructions.NewDeclaration($VAR.line, $VAR.pos, $ID.text, environment.NULL, $expr.e, false);}
+| LET ID  IG expr {$dec = instructions.NewDeclaration($LET.line, $LET.pos, $ID.text, environment.NULL, $expr.e, true);}
+| LET ID D_PTS types IG expr {$dec = instructions.NewDeclaration($LET.line, $LET.pos, $ID.text, $types.ty, $expr.e, true);}
 ;
 
 types returns[environment.TipoExpresion ty]
@@ -148,7 +150,8 @@ types returns[environment.TipoExpresion ty]
 ;
 
 expr returns [interfaces.Expression e]
-: left=expr op=(MUL|DIV) right=expr { $e = expressions.NewOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
+: op=SUB right=expr { $e = expressions.NewOperation($op.GetLine(), $op.GetColumn(), $right.e, "neg", $right.e) }
+| left=expr op=(MUL|DIV) right=expr { $e = expressions.NewOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=(ADD|SUB) right=expr { $e = expressions.NewOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=(MAY_IG|MAYOR) right=expr { $e = expressions.NewOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=(MEN_IG|MENOR) right=expr { $e = expressions.NewOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }

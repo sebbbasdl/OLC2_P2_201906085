@@ -14,10 +14,11 @@ type Declaration struct {
 	Id        string
 	Tipo      environment.TipoExpresion
 	Expresion interfaces.Expression
+	Global    bool
 }
 
-func NewDeclaration(lin int, col int, id string, tipo environment.TipoExpresion, val interfaces.Expression) Declaration {
-	instr := Declaration{lin, col, id, tipo, val}
+func NewDeclaration(lin int, col int, id string, tipo environment.TipoExpresion, val interfaces.Expression, global bool) Declaration {
+	instr := Declaration{lin, col, id, tipo, val, global}
 	return instr
 }
 
@@ -27,7 +28,12 @@ func (p Declaration) Ejecutar(ast *environment.AST, env interface{}, gen *genera
 	result = p.Expresion.Ejecutar(ast, env, gen)
 
 	gen.AddComment("Agregando una declaracion")
-	newVar = env.(environment.Environment).SaveVariable(p.Id, p.Tipo)
+	if p.Tipo == environment.NULL {
+		newVar = env.(environment.Environment).SaveVariable(p.Id, result.Type)
+	} else {
+		newVar = env.(environment.Environment).SaveVariable(p.Id, p.Tipo)
+	}
+
 	println(p.Id)
 	if result.Type == environment.BOOLEAN {
 		print("ENTRO ACA")

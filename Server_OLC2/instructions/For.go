@@ -32,7 +32,6 @@ func (p Fors) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 	var num2 = p.Expresion2.Ejecutar(ast, env, gen)
 	fmt.Println("num1: ", num1)
 	fmt.Println("num2: ", num2)
-
 	newVar = env.(environment.Environment).SaveVariable(p.Id, num1.Type)
 	temp1 := gen.NewTemp()
 	gen.AddExpression(temp1, "P", "0", "+")
@@ -46,15 +45,6 @@ func (p Fors) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 	label1 := gen.NewLabel()//58
 
 	var result environment.Value
-	/*condicion.Value = ""
-	condicion.IsTemp = false
-	condicion.Type = 3
-	fmt.Println(label1, label2)
-	condicion.TrueLabel = make([]interface{}, 0)
-	condicion.FalseLabel = make([]interface{}, 0)
-	condicion.TrueLabel = append(condicion.TrueLabel, label1)
-	condicion.FalseLabel = append(condicion.FalseLabel, label2)
-	condicion.IntValue = 0*/
 	var OutLvls []interface{}
 
 	temp2 := gen.NewTemp()

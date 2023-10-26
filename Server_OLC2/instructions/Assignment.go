@@ -27,6 +27,11 @@ func (p Assignment) Ejecutar(ast *environment.AST, env interface{}, gen *generat
 	//ejecutando valor
 	result = p.Expresion.Ejecutar(ast, env, gen)
 	//realizando asignacion
+	if gen.Temp_Concat != "" {
+
+		result.Value = gen.Temp_Concat
+		println("En declaracion", result.Value)
+	}
 	gen.AddSetStack(strconv.Itoa(variable.Posicion), result.Value)
 	gen.AddBr()
 	return result

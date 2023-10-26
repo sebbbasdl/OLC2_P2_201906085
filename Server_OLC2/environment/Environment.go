@@ -26,7 +26,12 @@ func (env Environment) SaveVariable(id string, tipo TipoExpresion) Symbol {
 	if variable, ok := env.Tabla[id]; ok {
 		fmt.Println("La variable "+id+" ya existe ", variable)
 		return env.Tabla[id]
+	}else if(id=="_"){
+		fmt.Println("No se guarda, es un _")
+		return env.Tabla[id]
 	}
+
+	
 	env.Tabla[id] = Symbol{Lin: 0, Col: 0, Tipo: tipo, Posicion: env.Size["size"]}
 	env.Size["size"] = env.Size["size"] + 1
 	return env.Tabla[id]
