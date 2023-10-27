@@ -30,8 +30,9 @@ func (p Assignment) Ejecutar(ast *environment.AST, env interface{}, gen *generat
 	if gen.Temp_Concat != "" {
 
 		result.Value = gen.Temp_Concat
-		println("En declaracion", result.Value)
+		println("En asignament", result.Value)
 	}
+	println("En asignament", result.Value)
 	gen.AddSetStack(strconv.Itoa(variable.Posicion), result.Value)
 	gen.AddBr()
 	return result

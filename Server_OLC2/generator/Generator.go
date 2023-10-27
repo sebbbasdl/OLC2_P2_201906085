@@ -21,6 +21,11 @@ type Generator struct {
 	ConcatFlag      bool
 	Temp_Label1     string
 	Temp_Label2     string
+	Temp_Case       int
+	Temp_Case2      int
+	Temp_Case_ifs   string
+	Block_Cases     []interface{}
+	Labels_Cases    []string
 }
 
 func NewGenerator() Generator {

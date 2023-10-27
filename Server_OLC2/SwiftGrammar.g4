@@ -44,6 +44,7 @@ instruction returns [interfaces.Instruction inst]
 | structCreation { $inst = $structCreation.dec }
 | whilestmt { $inst = $whilestmt.whiles }
 | forstmt { $inst = $forstmt.fors }
+| switchtmt { $inst = $switchtmt.swtch }
 ;
 
 structCreation returns[interfaces.Instruction dec]
@@ -122,6 +123,25 @@ elseiflist returns [[]interface{} else_if_list]
 
 elseif returns [interfaces.Instruction ifinst]
 : ELSE IF expr LLAVEIZQ block LLAVEDER { $ifinst = instructions.NewIf($IF.line, $IF.pos, $expr.e, $block.blk, nil, nil) }
+;
+
+switchtmt returns [interfaces.Instruction swtch]
+: SWITCH expr LLAVEIZQ  caselist  DEFAULT D_PTS block LLAVEDER{ $swtch = instructions.NewSwitch( $SWITCH.line, $SWITCH.pos, $expr.e,$caselist.cases, $block.blk ) }
+;
+
+caselist returns [[]interface{} cases]
+: listcases= caselist case { var arr3 []interface{}
+                        arr3= append($listcases.cases, $case.swtch)
+                        $cases= arr3
+                        }
+| case                  {
+                            $cases= []interface{}{}
+                            $cases = append($cases, $case.swtch)
+                        }
+;
+
+case returns [interfaces.Instruction swtch]
+: CASE expr D_PTS block { $swtch = instructions.NewCase( $CASE.line, $CASE.pos,$expr.e, $block.blk ) }
 ;
 
 whilestmt returns [interfaces.Instruction whiles]

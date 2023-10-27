@@ -26,11 +26,15 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 	gen.AddComment("****** Generando If")
 	var condicion, result environment.Value
 	var OutLvls []interface{}
+	gen.AddComment("HOLa11")
 	condicion = p.Expresion.Ejecutar(ast, env, gen)
+	fmt.Println("cond",condicion)
+	gen.AddComment("HOLa00")
 	newLabel := gen.NewLabel()
 	//*****************************************add true labels
 
 	for _, lvl := range condicion.TrueLabel {
+		gen.AddComment("HOLa")
 		gen.AddLabel(lvl.(string))
 	}
 	//instrucciones if

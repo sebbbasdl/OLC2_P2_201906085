@@ -167,6 +167,30 @@ public class SwiftGrammarBaseListener implements SwiftGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterWhilestmt(SwiftGrammarParser.WhilestmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhilestmt(SwiftGrammarParser.WhilestmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterForstmt(SwiftGrammarParser.ForstmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForstmt(SwiftGrammarParser.ForstmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDeclarationstmt(SwiftGrammarParser.DeclarationstmtContext ctx) { }
 	/**
 	 * {@inheritDoc}

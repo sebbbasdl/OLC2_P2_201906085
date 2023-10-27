@@ -6,8 +6,9 @@ type AST struct {
 	Errors       string
 	ElseIfFlag   bool
 	IfReturn     bool
-	Temp_Label1     string
-	Temp_Label2     string
+	Temp_Label1  string
+	Temp_Label2  string
+	SwitchBool   bool
 }
 
 func NewAST(inst []interface{}, print string, err string) AST {

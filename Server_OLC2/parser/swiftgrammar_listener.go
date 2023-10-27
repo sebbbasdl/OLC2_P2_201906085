@@ -43,6 +43,15 @@ type SwiftGrammarListener interface {
 	// EnterElseif is called when entering the elseif production.
 	EnterElseif(c *ElseifContext)
 
+	// EnterSwitchtmt is called when entering the switchtmt production.
+	EnterSwitchtmt(c *SwitchtmtContext)
+
+	// EnterCaselist is called when entering the caselist production.
+	EnterCaselist(c *CaselistContext)
+
+	// EnterCase is called when entering the case production.
+	EnterCase(c *CaseContext)
+
 	// EnterWhilestmt is called when entering the whilestmt production.
 	EnterWhilestmt(c *WhilestmtContext)
 
@@ -108,6 +117,15 @@ type SwiftGrammarListener interface {
 
 	// ExitElseif is called when exiting the elseif production.
 	ExitElseif(c *ElseifContext)
+
+	// ExitSwitchtmt is called when exiting the switchtmt production.
+	ExitSwitchtmt(c *SwitchtmtContext)
+
+	// ExitCaselist is called when exiting the caselist production.
+	ExitCaselist(c *CaselistContext)
+
+	// ExitCase is called when exiting the case production.
+	ExitCase(c *CaseContext)
 
 	// ExitWhilestmt is called when exiting the whilestmt production.
 	ExitWhilestmt(c *WhilestmtContext)

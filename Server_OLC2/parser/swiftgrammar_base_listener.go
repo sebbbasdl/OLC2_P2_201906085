@@ -92,6 +92,24 @@ func (s *BaseSwiftGrammarListener) EnterElseif(ctx *ElseifContext) {}
 // ExitElseif is called when production elseif is exited.
 func (s *BaseSwiftGrammarListener) ExitElseif(ctx *ElseifContext) {}
 
+// EnterSwitchtmt is called when production switchtmt is entered.
+func (s *BaseSwiftGrammarListener) EnterSwitchtmt(ctx *SwitchtmtContext) {}
+
+// ExitSwitchtmt is called when production switchtmt is exited.
+func (s *BaseSwiftGrammarListener) ExitSwitchtmt(ctx *SwitchtmtContext) {}
+
+// EnterCaselist is called when production caselist is entered.
+func (s *BaseSwiftGrammarListener) EnterCaselist(ctx *CaselistContext) {}
+
+// ExitCaselist is called when production caselist is exited.
+func (s *BaseSwiftGrammarListener) ExitCaselist(ctx *CaselistContext) {}
+
+// EnterCase is called when production case is entered.
+func (s *BaseSwiftGrammarListener) EnterCase(ctx *CaseContext) {}
+
+// ExitCase is called when production case is exited.
+func (s *BaseSwiftGrammarListener) ExitCase(ctx *CaseContext) {}
+
 // EnterWhilestmt is called when production whilestmt is entered.
 func (s *BaseSwiftGrammarListener) EnterWhilestmt(ctx *WhilestmtContext) {}
 
