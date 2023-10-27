@@ -45,5 +45,20 @@ func (p Switch) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 			fmt.Println("Error en bloque")
 		}
 	}
+	gen.AddComment("Default")
+	gen.AddLabel(gen.Temp_Default)
+	for _, s := range p.Block {
+		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
+			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+			if resInst != nil {
+				//agregando etiquetas de salida
+				for _, lvl := range resInst.(environment.Value).OutLabel {
+					OutLvls = append(OutLvls, lvl)
+				}
+			}
+		} else {
+			fmt.Println("Error en bloque")
+		}
+	}
 	return result
 }

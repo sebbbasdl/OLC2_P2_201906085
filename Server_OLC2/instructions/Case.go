@@ -53,6 +53,7 @@ func (p Case) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 		gen.AddComment("Se generan instrucciones de case")
 		gen.AddIf(gen.Temp_Case_ifs, expresion.Value, "==", label1)
 		gen.AddGoto(label0)
+		gen.Temp_Default = label0
 
 		fmt.Println("CANTIDAD BLOQ ", len(gen.Block_Cases))
 
