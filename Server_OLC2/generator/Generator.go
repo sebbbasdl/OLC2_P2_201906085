@@ -27,6 +27,8 @@ type Generator struct {
 	Block_Cases     []interface{}
 	Labels_Cases    []string
 	Temp_Default    string
+	Label_Break     string
+	Breakbool       bool
 }
 
 func NewGenerator() Generator {

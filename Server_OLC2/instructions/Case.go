@@ -59,25 +59,54 @@ func (p Case) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 
 		cont := 0
 		for _, s := range gen.Block_Cases {
-			gen.AddLabel(gen.Labels_Cases[cont])
+			gen.AddComment("PRUEBAAAA")
+
+			//var aux = eliminarDuplicados(gen.Labels_Cases)
+			fmt.Println("CONTADORSSSS->>>>>>>>", cont)
+			if len(gen.Labels_Cases) != 0 {
+				gen.AddLabel(gen.Labels_Cases[cont])
+				fmt.Println("SWITCHH->", gen.Labels_Cases)
+				gen.AddComment("PRUEBAAAA2")
+				fmt.Println("CONTADORSSSS->>>>>>>>", cont)
+				
+
+			}
 
 			cont = +1
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+				if gen.Breakbool == true {
+					gen.AddComment("BREAK")
+					out := gen.NewLabel()
+					gen.AddGoto(out)
+					OutLvls = append(OutLvls, out)
+					gen.Breakbool = false
+					//break
+				}
 				if resInst != nil {
 					//agregando etiquetas de salida
-					for _, lvl := range resInst.(environment.Value).OutLabel {
+					/*for _, lvl := range resInst.(environment.Value).OutLabel {
 						OutLvls = append(OutLvls, lvl)
-					}
+					}*/
 				}
 			} else {
 				fmt.Println("Error en bloque")
 			}
 		}
+		gen.AddLabel(label1)
 		for _, s := range p.Bloque {
-			gen.AddLabel(label1)
+
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
+				if gen.Breakbool == true {
+					gen.AddComment("BREAK")
+					out := gen.NewLabel()
+					gen.AddGoto(out)
+					OutLvls = append(OutLvls, out)
+					gen.Breakbool = false
+					//break
+				}
 				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+
 				if resInst != nil {
 					//agregando etiquetas de salida
 					for _, lvl := range resInst.(environment.Value).OutLabel {
@@ -90,7 +119,27 @@ func (p Case) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 		}
 
 	}
+	copiedSlice := make([]interface{}, len(OutLvls))
+	for i, item := range OutLvls {
+		copiedSlice[i] = item
+	}
+
+	result.OutLabel = copiedSlice
 
 	return result
 
+}
+
+func eliminarDuplicados(arr []string) []string {
+	encontrado := make(map[string]bool)
+	resultado := []string{}
+
+	for _, valor := range arr {
+		if _, ok := encontrado[valor]; !ok {
+			encontrado[valor] = true
+			resultado = append(resultado, valor)
+		}
+	}
+
+	return resultado
 }

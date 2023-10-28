@@ -42,7 +42,7 @@ func (p Fors) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 	labelret := gen.NewLabel()
 	gen.AddLabel(labelret)
 
-	label1 := gen.NewLabel()//58
+	label1 := gen.NewLabel() //58
 
 	var result environment.Value
 	var OutLvls []interface{}
@@ -56,55 +56,69 @@ func (p Fors) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 	gen.AddExpression(temp3, "P", "0", "+")
 	gen.AddGetStack(temp2, "(int)"+temp3)
 
-	label2 := gen.NewLabel()//60
-	label3 := gen.NewLabel()//61
+	label2 := gen.NewLabel() //60
+	label3 := gen.NewLabel() //61
 	gen.AddIf(temp2, num2.Value, "<=", label2)
 	gen.AddGoto(label3)
 
 	gen.AddLabel(label2)
 
-
 	for _, s := range p.Bloque {
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
+			
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+			if gen.Breakbool == true {
+				gen.AddComment("BREAK")
+				out := gen.NewLabel()
+				gen.AddGoto(out)
+				OutLvls = append(OutLvls, out)
+				gen.Breakbool=false
+				//break
+			}
 			if resInst != nil {
 				//agregando etiquetas de salida
 				for _, lvl := range resInst.(environment.Value).OutLabel {
 					OutLvls = append(OutLvls, lvl)
 				}
 			}
+
 		} else {
 			fmt.Println("Error en bloque")
 		}
 	}
 
+	
 	label4 := gen.NewLabel()
 	gen.AddLabel(label4)
-	temp4 := gen.NewTemp()//69
-	temp5 := gen.NewTemp()//70
+	temp4 := gen.NewTemp() //69
+	temp5 := gen.NewTemp() //70
 
-	gen.AddExpression(temp5, "P","0","+")
+	gen.AddExpression(temp5, "P", "0", "+")
 	gen.AddGetStack(temp4, "(int)"+temp5)
 
-	temp6 := gen.NewTemp()//71
-	temp7 := gen.NewTemp()//72
+	temp6 := gen.NewTemp() //71
+	temp7 := gen.NewTemp() //72
 
-	gen.AddExpression(temp7, temp4, "1","+")
-	gen.AddExpression(temp6, "P","0","+")
+	gen.AddExpression(temp7, temp4, "1", "+")
+	gen.AddExpression(temp6, "P", "0", "+")
 	gen.AddSetStack("(int)"+temp6, temp7)
-
-	
-
-
-
-	
+	gen.AddLabel(label3)
 	//*****************************************add out labels
 	gen.AddGoto(labelret)
 	//*****************************************add false labels
 	//for _, lvl := range condicion.FalseLabel {
 
-	gen.AddLabel(label3)
+	//gen.AddLabel(label3)
 	//}
+	//OutLvls = append(OutLvls, label3)
+	copiedSlice := make([]interface{}, len(OutLvls))
+	for i, item := range OutLvls {
+		copiedSlice[i] = item
+	}
+
+	result.OutLabel = copiedSlice
+
+	
 
 	return result
 }

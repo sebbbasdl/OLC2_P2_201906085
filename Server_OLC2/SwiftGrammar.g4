@@ -45,6 +45,7 @@ instruction returns [interfaces.Instruction inst]
 | whilestmt { $inst = $whilestmt.whiles }
 | forstmt { $inst = $forstmt.fors }
 | switchtmt { $inst = $switchtmt.swtch }
+| breaktmt { $inst = $breaktmt.break }
 ;
 
 structCreation returns[interfaces.Instruction dec]
@@ -153,6 +154,12 @@ forstmt returns [interfaces.Instruction fors]
 | FOR GUIONB IN e1 = expr PUNTO PUNTO PUNTO e2=expr LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $GUIONB.text, $e1.e,$e2.e,"nil", $block.blk) }
 | FOR ID IN ope = (STRING|ID) LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $ID.text, nil,nil, $ope.text ,$block.blk ) }
 ;
+
+breaktmt returns [interfaces.Instruction break]
+: BREAK { $break = instructions.NewBreak($BREAK.line, $BREAK.pos)}
+;
+
+
 
 declarationstmt returns [interfaces.Instruction dec]
 : VAR ID D_PTS types IG expr {$dec = instructions.NewDeclaration($VAR.line, $VAR.pos, $ID.text, $types.ty, $expr.e, false);}

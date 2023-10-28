@@ -35,6 +35,7 @@ func (p Switch) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 	for _, s := range p.CaseBlock {
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+			
 			if resInst != nil {
 				//agregando etiquetas de salida
 				for _, lvl := range resInst.(environment.Value).OutLabel {
@@ -50,6 +51,14 @@ func (p Switch) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 	for _, s := range p.Block {
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+			if gen.Breakbool == true {
+				gen.AddComment("BREAK")
+				out := gen.NewLabel()
+				gen.AddGoto(out)
+				OutLvls = append(OutLvls, out)
+				gen.Breakbool=false
+				//break
+			}
 			if resInst != nil {
 				//agregando etiquetas de salida
 				for _, lvl := range resInst.(environment.Value).OutLabel {
@@ -60,5 +69,12 @@ func (p Switch) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 			fmt.Println("Error en bloque")
 		}
 	}
+
+	copiedSlice := make([]interface{}, len(OutLvls))
+	for i, item := range OutLvls {
+		copiedSlice[i] = item
+	}
+
+	result.OutLabel = copiedSlice
 	return result
 }

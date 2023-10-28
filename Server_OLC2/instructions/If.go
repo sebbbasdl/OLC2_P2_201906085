@@ -26,21 +26,29 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 	gen.AddComment("****** Generando If")
 	var condicion, result environment.Value
 	var OutLvls []interface{}
-	gen.AddComment("HOLa11")
+
 	condicion = p.Expresion.Ejecutar(ast, env, gen)
-	fmt.Println("cond",condicion)
-	gen.AddComment("HOLa00")
+	fmt.Println("cond", condicion)
+
 	newLabel := gen.NewLabel()
 	//*****************************************add true labels
 
 	for _, lvl := range condicion.TrueLabel {
-		gen.AddComment("HOLa")
+
 		gen.AddLabel(lvl.(string))
 	}
 	//instrucciones if
 	for _, s := range p.Bloque {
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+			if gen.Breakbool == true {
+				gen.AddComment("BREAK")
+				out := gen.NewLabel()
+				gen.AddGoto(out)
+				OutLvls = append(OutLvls, out)
+				gen.Breakbool = false
+				//break
+			}
 			if resInst != nil {
 				//agregando etiquetas de salida
 				for _, lvl := range resInst.(environment.Value).OutLabel {
@@ -117,10 +125,11 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 	gen.AddComment("out labels2")
 	//gen.AddGoto(newLabel3)
 	gen.AddComment("FIN Else")
-	OutLvls = append(OutLvls, newLabel)
+	//OutLvls = append(OutLvls, newLabel)
+	gen.AddLabel(newLabel)
 	//OutLvls = append(OutLvls, newLabel2)
 	//OutLvls = append(OutLvls, newLabel3)
-	fmt.Println(OutLvls)
+	fmt.Println("---------------------->>>>>>>", OutLvls)
 
 	copiedSlice := make([]interface{}, len(OutLvls))
 	for i, item := range OutLvls {
@@ -128,5 +137,8 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 	}
 
 	result.OutLabel = copiedSlice
+
+	gen.AddComment("FIN OUTLABEL")
+
 	return result
 }

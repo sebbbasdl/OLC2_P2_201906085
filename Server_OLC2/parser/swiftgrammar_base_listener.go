@@ -122,6 +122,12 @@ func (s *BaseSwiftGrammarListener) EnterForstmt(ctx *ForstmtContext) {}
 // ExitForstmt is called when production forstmt is exited.
 func (s *BaseSwiftGrammarListener) ExitForstmt(ctx *ForstmtContext) {}
 
+// EnterBreaktmt is called when production breaktmt is entered.
+func (s *BaseSwiftGrammarListener) EnterBreaktmt(ctx *BreaktmtContext) {}
+
+// ExitBreaktmt is called when production breaktmt is exited.
+func (s *BaseSwiftGrammarListener) ExitBreaktmt(ctx *BreaktmtContext) {}
+
 // EnterDeclarationstmt is called when production declarationstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterDeclarationstmt(ctx *DeclarationstmtContext) {}
 
