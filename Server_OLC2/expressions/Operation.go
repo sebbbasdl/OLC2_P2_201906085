@@ -124,7 +124,20 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 			} else {
 				ast.SetError("ERROR: No es posible restar")
 			}
+    
 		}
+	case "%":
+		{
+			if dominante == environment.INTEGER || dominante == environment.FLOAT {
+				gen.AddExpression(newTemp, op1.Value, op2.Value, "%")
+				result = environment.NewValue(newTemp, true, dominante)
+				result.IntValue = op1.IntValue % op2.IntValue
+				return result
+			} else {
+				ast.SetError("ERROR: No es posible restar")
+			}
+
+	}
 	case "neg":
 		{
 			op1 = o.Op_izq.Ejecutar(ast, env, gen)
