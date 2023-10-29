@@ -46,6 +46,7 @@ instruction returns [interfaces.Instruction inst]
 | forstmt { $inst = $forstmt.fors }
 | switchtmt { $inst = $switchtmt.swtch }
 | breaktmt { $inst = $breaktmt.break }
+| continuetmt{ $inst = $continuetmt.continue }
 ;
 
 structCreation returns[interfaces.Instruction dec]
@@ -159,6 +160,9 @@ breaktmt returns [interfaces.Instruction break]
 : BREAK { $break = instructions.NewBreak($BREAK.line, $BREAK.pos)}
 ;
 
+continuetmt returns [interfaces.Instruction continue]
+: CONTINUE { $continue = instructions.NewContinue($CONTINUE.line, $CONTINUE.pos)}
+;
 
 
 declarationstmt returns [interfaces.Instruction dec]

@@ -128,6 +128,12 @@ func (s *BaseSwiftGrammarListener) EnterBreaktmt(ctx *BreaktmtContext) {}
 // ExitBreaktmt is called when production breaktmt is exited.
 func (s *BaseSwiftGrammarListener) ExitBreaktmt(ctx *BreaktmtContext) {}
 
+// EnterContinuetmt is called when production continuetmt is entered.
+func (s *BaseSwiftGrammarListener) EnterContinuetmt(ctx *ContinuetmtContext) {}
+
+// ExitContinuetmt is called when production continuetmt is exited.
+func (s *BaseSwiftGrammarListener) ExitContinuetmt(ctx *ContinuetmtContext) {}
+
 // EnterDeclarationstmt is called when production declarationstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterDeclarationstmt(ctx *DeclarationstmtContext) {}
 

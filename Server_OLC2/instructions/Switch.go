@@ -61,9 +61,9 @@ func (p Switch) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 			}
 			if resInst != nil {
 				//agregando etiquetas de salida
-				for _, lvl := range resInst.(environment.Value).OutLabel {
+				/*for _, lvl := range resInst.(environment.Value).OutLabel {
 					OutLvls = append(OutLvls, lvl)
-				}
+				}*/
 			}
 		} else {
 			fmt.Println("Error en bloque")
@@ -76,5 +76,6 @@ func (p Switch) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 	}
 
 	result.OutLabel = copiedSlice
+	gen.Cont_case = 0
 	return result
 }

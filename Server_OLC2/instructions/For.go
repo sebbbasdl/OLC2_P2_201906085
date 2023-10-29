@@ -75,6 +75,14 @@ func (p Fors) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 				gen.Breakbool=false
 				//break
 			}
+			if gen.ContinueBool == true {
+				gen.AddComment("Continue")
+				out := gen.NewLabel()
+				gen.AddGoto(out)
+				OutLvls = append(OutLvls, out)
+				gen.ContinueBool = false
+				//break
+			}
 			if resInst != nil {
 				//agregando etiquetas de salida
 				for _, lvl := range resInst.(environment.Value).OutLabel {

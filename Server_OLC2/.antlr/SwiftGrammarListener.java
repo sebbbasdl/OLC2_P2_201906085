@@ -184,6 +184,26 @@ public interface SwiftGrammarListener extends ParseTreeListener {
 	 */
 	void exitForstmt(SwiftGrammarParser.ForstmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#breaktmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterBreaktmt(SwiftGrammarParser.BreaktmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#breaktmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitBreaktmt(SwiftGrammarParser.BreaktmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#continuetmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterContinuetmt(SwiftGrammarParser.ContinuetmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#continuetmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitContinuetmt(SwiftGrammarParser.ContinuetmtContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SwiftGrammarParser#declarationstmt}.
 	 * @param ctx the parse tree
 	 */

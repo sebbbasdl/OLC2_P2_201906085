@@ -29,6 +29,9 @@ type Generator struct {
 	Temp_Default    string
 	Label_Break     string
 	Breakbool       bool
+	ContinueBool    bool
+	Labelret_for    string
+	Cont_case       int
 }
 
 func NewGenerator() Generator {

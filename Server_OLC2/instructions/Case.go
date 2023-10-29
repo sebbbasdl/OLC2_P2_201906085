@@ -56,23 +56,18 @@ func (p Case) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 		gen.Temp_Default = label0
 
 		fmt.Println("CANTIDAD BLOQ ", len(gen.Block_Cases))
+		//gen.Labels_Cases = eliminarDuplicados(gen.Labels_Cases)
+		if gen.Cont_case < gen.Temp_Case-1 && len(gen.Labels_Cases) != 0 && gen.Cont_case == 0 {
+			gen.AddLabel(gen.Labels_Cases[gen.Cont_case])
+			fmt.Println("SWITCHH->", gen.Labels_Cases)
+			gen.AddComment("PRUEBAAAA2")
+			fmt.Println("CONTADORSSSS222222->>>>>>>>", len(gen.Labels_Cases))
+			//gen.Labels_Cases = eliminarElemento(gen.Labels_Cases, gen.Cont_case)
+			fmt.Println("SWITCHH->", gen.Labels_Cases)
 
-		cont := 0
+		}
 		for _, s := range gen.Block_Cases {
-			gen.AddComment("PRUEBAAAA")
 
-			//var aux = eliminarDuplicados(gen.Labels_Cases)
-			fmt.Println("CONTADORSSSS->>>>>>>>", cont)
-			if len(gen.Labels_Cases) != 0 {
-				gen.AddLabel(gen.Labels_Cases[cont])
-				fmt.Println("SWITCHH->", gen.Labels_Cases)
-				gen.AddComment("PRUEBAAAA2")
-				fmt.Println("CONTADORSSSS->>>>>>>>", cont)
-				
-
-			}
-
-			cont = +1
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
 				if gen.Breakbool == true {
@@ -83,11 +78,26 @@ func (p Case) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gen
 					gen.Breakbool = false
 					//break
 				}
+				gen.AddComment("PRUEBAAAA")
+
+				//var aux = eliminarDuplicados(gen.Labels_Cases)
+				fmt.Println("CONTADORSSSS->>>>>>>>", gen.Cont_case)
+
+				if gen.Cont_case < gen.Temp_Case-1 && len(gen.Labels_Cases) != 0 && gen.Cont_case != 0{
+					gen.AddLabel(gen.Labels_Cases[gen.Cont_case])
+					fmt.Println("SWITCHH->", gen.Labels_Cases)
+					gen.AddComment("PRUEBAAAA2")
+					fmt.Println("CONTADORSSSS222222->>>>>>>>", len(gen.Labels_Cases))
+					//gen.Labels_Cases = eliminarElemento(gen.Labels_Cases, gen.Cont_case)
+					fmt.Println("SWITCHH->", gen.Labels_Cases)
+
+				}
+				gen.Cont_case += 1
 				if resInst != nil {
 					//agregando etiquetas de salida
-					/*for _, lvl := range resInst.(environment.Value).OutLabel {
+					for _, lvl := range resInst.(environment.Value).OutLabel {
 						OutLvls = append(OutLvls, lvl)
-					}*/
+					}
 				}
 			} else {
 				fmt.Println("Error en bloque")
@@ -142,4 +152,16 @@ func eliminarDuplicados(arr []string) []string {
 	}
 
 	return resultado
+}
+
+func eliminarElemento(arr []string, pos int) []string {
+	if pos < 0 || pos >= len(arr) {
+		fmt.Println("Posición inválida")
+		return arr
+	}
+
+	// Crear un nuevo slice que excluya el elemento en la posición pos
+	nuevoSlice := append(arr[:pos], arr[pos+1:]...)
+
+	return nuevoSlice
 }
