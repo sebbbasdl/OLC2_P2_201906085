@@ -9,6 +9,7 @@ type AST struct {
 	Temp_Label1  string
 	Temp_Label2  string
 	SwitchBool   bool
+	Tabla        [][]string
 }
 
 func NewAST(inst []interface{}, print string, err string) AST {

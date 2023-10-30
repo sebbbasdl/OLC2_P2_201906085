@@ -124,20 +124,48 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 			} else {
 				ast.SetError("ERROR: No es posible restar")
 			}
-    
+
 		}
 	case "%":
 		{
+			op1 = o.Op_izq.Ejecutar(ast, env, gen)
+			op2 = o.Op_der.Ejecutar(ast, env, gen)
 			if dominante == environment.INTEGER || dominante == environment.FLOAT {
-				gen.AddExpression(newTemp, op1.Value, op2.Value, "%")
-				result = environment.NewValue(newTemp, true, dominante)
-				result.IntValue = op1.IntValue % op2.IntValue
+				if (string(op1.Value[0]) == "t") && string(op2.Value[0]) == "t" {
+					fmt.Println("hay t op1")
+					fmt.Println("op1: ", op1.Value, "op2: ", op2.Value)
+					gen.AddExpression(newTemp, "(int)"+op1.Value, "(int)"+op2.Value, "%")
+					result = environment.NewValue(newTemp, true, dominante)
+					result.IntValue = op1.IntValue % op2.IntValue
+					fmt.Println("MODULO: ", result.IntValue)
+				} else if string(op1.Value[0]) == "t" {
+					fmt.Println("hay t op1")
+					fmt.Println("op1: ", op1.Value, "op2: ", op2.Value)
+					gen.AddExpression(newTemp, "(int)"+op1.Value, op2.Value, "%")
+					result = environment.NewValue(newTemp, true, dominante)
+					result.IntValue = op1.IntValue % op2.IntValue
+					fmt.Println("MODULO: ", result.IntValue)
+				} else if string(op2.Value[0]) == "t" {
+					fmt.Println("hay t op")
+					fmt.Println("op1: ", op1.Value, "op2: ", "(int)"+op2.Value)
+					gen.AddExpression(newTemp, op1.Value, op2.Value, "%")
+					result = environment.NewValue(newTemp, true, dominante)
+					result.IntValue = op1.IntValue % op2.IntValue
+					fmt.Println("MODULO: ", result.IntValue)
+				} else {
+					fmt.Println("op1: ", op1.Value, "op2: ", op2.Value)
+					gen.AddExpression(newTemp, op1.Value, op2.Value, "%")
+					result = environment.NewValue(newTemp, true, dominante)
+					result.IntValue = op1.IntValue % op2.IntValue
+					fmt.Println("MODULO: ", result.IntValue)
+				}
+
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible restar")
 			}
 
-	}
+		}
 	case "neg":
 		{
 			op1 = o.Op_izq.Ejecutar(ast, env, gen)

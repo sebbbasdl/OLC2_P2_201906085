@@ -6,6 +6,8 @@ import (
 	"Server2/interfaces"
 	"Server2/parser"
 	"fmt"
+	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -28,6 +30,141 @@ type Message struct {
 	Content string `json:"content"`
 }
 
+// Tabla de simbolos DOT
+func GenerateTableDOT(data [][]string) string {
+	contador := 0
+	dotTable := "digraph Table {\n"
+	dotTable += "  node [shape=none fontname=Helvetica]\n"
+
+	// Encabezado de la tabla
+	dotTable += "  n1 [label = <<table>\n"
+	dotTable += "    <tr><td colspan=\"9\" bgcolor=\"Peru\">Tabla</td></tr>\n"
+	dotTable += "    <tr><td bgcolor=\"orange\">ID</td><td bgcolor=\"orange\">Tipo Símbolo</td><td bgcolor=\"orange\">Tipo Dato</td><td bgcolor=\"orange\">Ámbito</td><td bgcolor=\"orange\">Línea</td><td bgcolor=\"orange\">Columna</td><td bgcolor=\"orange\">Valor</td><td bgcolor=\"orange\">Id</td></tr>"
+
+	// Filas de datos
+	for _, row := range data {
+		if len(row) >= 7 {
+			contador++
+			contadorStr := fmt.Sprintf("%d", contador) // Convertir contador a cadena
+			dotTable += fmt.Sprintf("    <tr><td bgcolor=\"#00bfff\">%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n", contadorStr, row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+		}
+	}
+
+	// Cierre de la tabla
+	dotTable += "  </table>> ]\n"
+
+	dotTable += "}\n"
+
+	return dotTable
+}
+
+func generarDot(dotData string, rutaArchivo string, nombreArchivo string) error {
+	// Crear el archivo DOT en la ubicación especificada
+	archivo, err := os.Create(rutaArchivo + "/" + nombreArchivo + ".dot")
+	if err != nil {
+		return err
+	}
+	defer archivo.Close()
+
+	// Escribir los datos DOT en el archivo
+	_, err = archivo.WriteString(dotData)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func generarImagen(rutaDot string, rutaImagen string, nombreArchivo string) error {
+	// Comando para generar la imagen SVG desde el archivo DOT
+	cmd := exec.Command("dot", "-Tpng", rutaDot, "-o", rutaImagen+"\\"+nombreArchivo+".png")
+
+	// Ejecutar el comando
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type ErrorType int
+
+const (
+	LexicalError ErrorType = iota
+	SyntaxTypeError
+)
+
+type ErrorInfo struct {
+	Type    ErrorType
+	Line    int
+	Column  int
+	Message string
+}
+
+type ErrorListener struct {
+	*antlr.DefaultErrorListener
+	Errors []ErrorInfo
+}
+
+func NewErrorListener() *ErrorListener {
+	return &ErrorListener{}
+}
+
+func (e *ErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, ex antlr.RecognitionException) {
+	errorType := LexicalError
+
+	if _, ok := offendingSymbol.(antlr.Token); ok {
+		errorType = SyntaxTypeError
+	}
+
+	errorInfo := ErrorInfo{
+		Type:    errorType,
+		Line:    line,
+		Column:  column,
+		Message: msg,
+	}
+	e.Errors = append(e.Errors, errorInfo)
+}
+
+func GenerateErrorDOT(errors []ErrorInfo) string {
+	// Inicializar la cadena DOT
+	dotTable := "digraph ErrorTable {\n"
+	dotTable += "  node [shape=none fontname=Helvetica]\n"
+
+	// Encabezado de la tabla
+	dotTable += "  n1 [label = <<table>\n"
+	dotTable += "    <tr><td colspan=\"4\" bgcolor=\"Peru\">Errores</td></tr>\n"
+	dotTable += "    <tr><td bgcolor=\"orange\">Tipo</td><td bgcolor=\"orange\">Línea</td><td bgcolor=\"orange\">Columna</td><td bgcolor=\"orange\">Mensaje</td></tr>"
+
+	// Filas de datos
+	for _, errorInfo := range errors {
+		errorType := ""
+		switch errorInfo.Type {
+		case LexicalError:
+			errorType = "Lexico"
+		case SyntaxTypeError:
+			errorType = "Sintactico"
+		default:
+			errorType = "Desconocido"
+		}
+
+		// Escapar caracteres especiales en el mensaje para .dot
+		message := strings.ReplaceAll(errorInfo.Message, "\"", "\\\"")
+		message = strings.ReplaceAll(message, "<", "&lt;")
+		message = strings.ReplaceAll(message, ">", "&gt;")
+
+		dotTable += fmt.Sprintf("    <tr><td>%s</td><td>%d</td><td>%d</td><td>%s</td></tr>\n", errorType, errorInfo.Line, errorInfo.Column, message)
+	}
+
+	// Cierre de la tabla
+	dotTable += "  </table>> ]\n"
+
+	dotTable += "}\n"
+
+	return dotTable
+}
+
 func handleInterpreter(c *fiber.Ctx) error {
 	var message Message
 	if err := c.BodyParser(&message); err != nil {
@@ -39,8 +176,15 @@ func handleInterpreter(c *fiber.Ctx) error {
 	input := antlr.NewInputStream(code)
 	lexer := parser.NewSwiftLexer(input)
 	tokens := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	errorListener := NewErrorListener()
+	lexer.RemoveErrorListeners()
+	lexer.AddErrorListener(errorListener)
+
 	//creacion de parser
 	p := parser.NewSwiftGrammarParser(tokens)
+	p.RemoveErrorListeners() // Remove the default error listener
+	p.AddErrorListener(errorListener)
 	p.BuildParseTrees = true
 	tree := p.S()
 	//listener
@@ -69,6 +213,20 @@ func handleInterpreter(c *fiber.Ctx) error {
 		}
 	}
 
+	for _, errorInfo := range errorListener.Errors {
+		errorType := ""
+		switch errorInfo.Type {
+		case LexicalError:
+			errorType = "Lexical"
+		case SyntaxTypeError:
+			errorType = "Syntax Error"
+		default:
+			errorType = "Unknown"
+		}
+
+		fmt.Printf("%s error at line %d, column %d: %s\n", errorType, errorInfo.Line, errorInfo.Column, errorInfo.Message)
+	}
+
 	//add headers, natives & main
 	Generator.GenerateFinalCode()
 	var ConsoleOut = ""
@@ -84,6 +242,38 @@ func handleInterpreter(c *fiber.Ctx) error {
 		Flag:    true,
 		Message: "Ejecución realizada con éxito",
 	}
+	dotTable := GenerateTableDOT(Ast.Tabla)
+	rutaImagenTabla := "C:\\Users\\sebas\\go\\bin\\client\\src\\pages\\imagenes"
+	nombreArchivoTabla := "tabla"
+
+	if err := generarDot(dotTable, rutaImagenTabla, nombreArchivoTabla); err != nil {
+		fmt.Println("Error al generar el archivo DOT:", err)
+		//return nil
+	}
+
+	// Llama a la función generarImagen para crear la imagen PNG a partir del archivo DOT
+	if err := generarImagen(rutaImagenTabla+"/"+nombreArchivoTabla+".dot", rutaImagenTabla, nombreArchivoTabla); err != nil {
+		fmt.Println("Error al generar la imagen Tabla:", err)
+		//return nil
+	}
+
+	//Tabla de Errores
+	errors := errorListener.Errors
+	dotError := GenerateErrorDOT(errors)
+	rutaImagenError := "C:\\Users\\Usuario\\Documents\\OLC2_P2_201906085\\Server_OLC2\\imagenes"
+	nombreArchivoError := "errores"
+
+	if err := generarDot(dotError, rutaImagenError, nombreArchivoError); err != nil {
+		fmt.Println("Error al generar el archivo DOT:", err)
+		//return nil
+	}
+
+	// Llama a la función generarImagen para crear la imagen SVG a partir del archivo DOT
+	if err := generarImagen(rutaImagenError+"\\"+nombreArchivoError+".dot", rutaImagenError, nombreArchivoError); err != nil {
+		fmt.Println("Error al generar la imagen Error:", err)
+		//return nil
+	}
+
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 

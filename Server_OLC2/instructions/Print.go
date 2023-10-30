@@ -22,7 +22,7 @@ func (p Print) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Ge
 	var result environment.Value
 	result = p.Value.(interfaces.Expression).Ejecutar(ast, env, gen)
 	fmt.Println(result.Type)
-	if result.Type == environment.INTEGER || result.Type == environment.FLOAT || result.Type == environment.ARRAY {
+	if result.Type == environment.INTEGER || result.Type == environment.ARRAY {
 		gen.AddPrintf("d", "(int)"+fmt.Sprintf("%v", result.Value))
 		gen.AddPrintf("c", "10")
 		gen.AddBr()
@@ -52,7 +52,7 @@ func (p Print) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Ge
 		gen.AddLabel(newLabel)
 		gen.AddPrintf("c", "10")
 		gen.AddBr()
-	} else if result.Type == environment.STRING {
+	} else if result.Type == environment.STRING || result.Type == environment.FLOAT {
 		//llamar a generar printstring
 		gen.AddComment("Aqui string en print")
 

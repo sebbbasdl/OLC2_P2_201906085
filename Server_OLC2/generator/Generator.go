@@ -304,7 +304,7 @@ func (g *Generator) AddConcatString() {
 		label5 := g.NewLabel() // 10
 
 		// Generar la función de concatenación de strings
-		g.Natives = append(g.Natives, "void concat_string_proc() {\n")
+		g.Natives = append(g.Natives, "void concatenar_strings() {\n")
 		g.Natives = append(g.Natives, "\t", temp1, " = ", "H;\n")
 		g.Natives = append(g.Natives, "\t", temp2, " = ", "P + 1;\n")
 		g.Natives = append(g.Natives, "\t", temp3, " = stack[(int)"+temp2+"];\n")
@@ -341,7 +341,7 @@ func (g *Generator) AddConcatString() {
 			//g.Code = append(g.Code, "\tconcat_string_proc();\n")
 			//g.Code = append(g.Code, )
 		} else {
-			g.FuncCode = append(g.FuncCode, "\tconcat_string_proc();\n")
+			g.FuncCode = append(g.FuncCode, "\tconcatenar_strings();\n")
 		}
 		g.ConcatFlag = false
 	}

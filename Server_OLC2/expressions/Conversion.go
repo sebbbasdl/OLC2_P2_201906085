@@ -46,7 +46,38 @@ func (o Conversion) Ejecutar(ast *environment.AST, env interface{}, gen *generat
 
 			result = environment.NewValue(fmt.Sprintf("%v", intValue), false, o.Tipo)
 
+			return result
+		}
+	} else if o.Tipo == environment.STRING {
+		expr := o.Expr.Ejecutar(ast, env, gen)
+
+		if expr.Type == environment.INTEGER {
+			gen.AddComment("Conversion")
+			//valor := expr.Value
+			fmt.Println("EXPRRR", o.valor_str)
+			valor := strings.Trim(o.valor_str, "\"")
+			fmt.Println("----- aca es primitive", gen.Concat)
+			gen.AddComment("Primitive")
+			//nuevo temporal
+			newTemp := gen.NewTemp()
+			//iguala a heap pointer
+			gen.AddAssign(newTemp, "H")
+			//recorremos string en ascii
+
+			byteArray := []byte(valor)
+			for _, asc := range byteArray {
+				//se agrega ascii al heap
+				gen.AddSetHeap("(int)H", strconv.Itoa(int(asc)))
+				//suma heap pointer
+				gen.AddExpression("H", "H", "1", "+")
+			}
+			//caracteres de escape
+			gen.AddSetHeap("(int)H", "-1")
+			gen.AddExpression("H", "H", "1", "+")
+			gen.AddBr()
 			
+			result = environment.NewValue(newTemp, true, o.Tipo)
+
 			return result
 		}
 	}
