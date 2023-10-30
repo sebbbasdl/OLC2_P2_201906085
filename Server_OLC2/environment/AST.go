@@ -1,15 +1,16 @@
 package environment
 
 type AST struct {
-	Instructions []interface{}
-	Print        string
-	Errors       string
-	ElseIfFlag   bool
-	IfReturn     bool
-	Temp_Label1  string
-	Temp_Label2  string
-	SwitchBool   bool
-	Tabla        [][]string
+	Instructions       []interface{}
+	Print              string
+	Errors             string
+	ElseIfFlag         bool
+	IfReturn           bool
+	Temp_Label1        string
+	Temp_Label2        string
+	SwitchBool         bool
+	Tabla              [][]string
+	Errores_Semanticos [][]string
 }
 
 func NewAST(inst []interface{}, print string, err string) AST {

@@ -26,6 +26,24 @@ func (p Declaration) Ejecutar(ast *environment.AST, env interface{}, gen *genera
 	var result environment.Value
 	var newVar environment.Symbol
 	result = p.Expresion.Ejecutar(ast, env, gen)
+	fmt.Println("declaracion: ", result)
+	
+	/*********TABLA DE SIMBOLOS***********/
+
+	if result.Type == environment.INTEGER {
+		datos := []string{"1", "Variable", "Int", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	} else if result.Type == environment.FLOAT {
+		datos := []string{"1", "Variable", "Float", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	} else if result.Type == environment.STRING {
+		datos := []string{"1", "Variable", "String", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	} else if result.Type == environment.BOOLEAN {
+		datos := []string{"1", "Variable", "Bool", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	}
+	/*********TABLA DE SIMBOLOS***********/
 
 	gen.AddComment("Agregando una declaracion")
 	if p.Tipo == environment.NULL {

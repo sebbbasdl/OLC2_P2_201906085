@@ -5,6 +5,7 @@ import (
 	"Server2/generator"
 	"Server2/interfaces"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -31,6 +32,23 @@ func (p Function) Ejecutar(ast *environment.AST, env interface{}, gen *generator
 	var envFunc environment.Environment
 	envFunc = environment.NewEnvironment(env.(environment.Environment), p.Id)
 	envFunc.Size["size"] = envFunc.Size["size"] + 1
+
+	/*********TABLA DE SIMBOLOS***********/
+	if result.Type == environment.INTEGER {
+		datos := []string{"1", "Función", "Int", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	} else if result.Type == environment.FLOAT {
+		datos := []string{"1", "Función", "Float", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	} else if result.Type == environment.STRING {
+		datos := []string{"1", "Función", "String", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	} else if result.Type == environment.BOOLEAN {
+		datos := []string{"1", "Función", "Bool", env.(environment.Environment).Id, strconv.Itoa(p.Col), strconv.Itoa(p.Lin), p.Id}
+		ast.Tabla = append(ast.Tabla, datos)
+	}
+	/*********TABLA DE SIMBOLOS***********/
+
 	//variables
 	for _, s := range p.ListDec {
 		res := s.(interfaces.Instruction).Ejecutar(ast, env, gen)

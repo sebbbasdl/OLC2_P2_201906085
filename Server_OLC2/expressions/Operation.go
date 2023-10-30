@@ -108,6 +108,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible sumar")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible sumar"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "-":
@@ -163,6 +165,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible restar")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible restar"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 
 		}
@@ -178,7 +182,9 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				result.IntValue = 0 - op2.IntValue
 				return result
 			} else {
-				ast.SetError("ERROR: No es posible restar")
+				ast.SetError("ERROR: No es posible negacion")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible negacion"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "*":
@@ -193,6 +199,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible Multiplicar")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible multiplicar"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "/":
@@ -231,6 +239,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible Dividir")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible dividir"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 
 		}
@@ -253,6 +263,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 
 			} else {
 				ast.SetError("ERROR: No es posible comparar <")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible comparar <"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case ">":
@@ -274,6 +286,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible comparar >")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible comparar >"}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "<=":
@@ -295,6 +309,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible comparar <=")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible comparar <="}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case ">=":
@@ -316,6 +332,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible comparar >=")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible comparar >="}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "==":
@@ -409,6 +427,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 
 			} else {
 				ast.SetError("ERROR: No es posible comparar ==")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible comparar =="}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "!=":
@@ -430,6 +450,8 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible comparar !=")
+				error_sem := []string{"Semantico", strconv.Itoa(o.Col), strconv.Itoa(o.Lin), "No es posible comparar !="}
+				ast.Errores_Semanticos = append(ast.Errores_Semanticos, error_sem)
 			}
 		}
 	case "&&":

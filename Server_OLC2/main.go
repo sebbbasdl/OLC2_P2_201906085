@@ -39,14 +39,14 @@ func GenerateTableDOT(data [][]string) string {
 	// Encabezado de la tabla
 	dotTable += "  n1 [label = <<table>\n"
 	dotTable += "    <tr><td colspan=\"9\" bgcolor=\"Peru\">Tabla</td></tr>\n"
-	dotTable += "    <tr><td bgcolor=\"orange\">ID</td><td bgcolor=\"orange\">Tipo Símbolo</td><td bgcolor=\"orange\">Tipo Dato</td><td bgcolor=\"orange\">Ámbito</td><td bgcolor=\"orange\">Línea</td><td bgcolor=\"orange\">Columna</td><td bgcolor=\"orange\">Valor</td><td bgcolor=\"orange\">Id</td></tr>"
+	dotTable += "    <tr><td bgcolor=\"orange\">ID</td><td bgcolor=\"orange\">Tipo Símbolo</td><td bgcolor=\"orange\">Tipo Dato</td><td bgcolor=\"orange\">Ámbito</td><td bgcolor=\"orange\">Línea</td><td bgcolor=\"orange\">Columna</td><td bgcolor=\"orange\">Id</td></tr>"
 
 	// Filas de datos
 	for _, row := range data {
-		if len(row) >= 7 {
+		if len(row) >= 6 {
 			contador++
 			contadorStr := fmt.Sprintf("%d", contador) // Convertir contador a cadena
-			dotTable += fmt.Sprintf("    <tr><td bgcolor=\"#00bfff\">%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n", contadorStr, row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+			dotTable += fmt.Sprintf("    <tr><td bgcolor=\"#00bfff\">%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n", contadorStr, row[1], row[2], row[3], row[4], row[5], row[6])
 		}
 	}
 
@@ -127,7 +127,7 @@ func (e *ErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol
 	e.Errors = append(e.Errors, errorInfo)
 }
 
-func GenerateErrorDOT(errors []ErrorInfo) string {
+func GenerateErrorDOT(errors []ErrorInfo, data [][]string) string {
 	// Inicializar la cadena DOT
 	dotTable := "digraph ErrorTable {\n"
 	dotTable += "  node [shape=none fontname=Helvetica]\n"
@@ -155,6 +155,15 @@ func GenerateErrorDOT(errors []ErrorInfo) string {
 		message = strings.ReplaceAll(message, ">", "&gt;")
 
 		dotTable += fmt.Sprintf("    <tr><td>%s</td><td>%d</td><td>%d</td><td>%s</td></tr>\n", errorType, errorInfo.Line, errorInfo.Column, message)
+	}
+
+	contador := 0
+	println("ESTOY EN TABLA ERRORES")
+	for _, row := range data {
+		if len(row) >= 3 {
+			contador++
+			dotTable += fmt.Sprintf("    <tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n", row[0], row[1], row[2], row[3])
+		}
 	}
 
 	// Cierre de la tabla
@@ -242,8 +251,9 @@ func handleInterpreter(c *fiber.Ctx) error {
 		Flag:    true,
 		Message: "Ejecución realizada con éxito",
 	}
+	//Tabla de simbolos
 	dotTable := GenerateTableDOT(Ast.Tabla)
-	rutaImagenTabla := "C:\\Users\\sebas\\go\\bin\\client\\src\\pages\\imagenes"
+	rutaImagenTabla := "C:\\Users\\Usuario\\Documents\\OLC2_P2_201906085\\Server_OLC2\\imagenes"
 	nombreArchivoTabla := "tabla"
 
 	if err := generarDot(dotTable, rutaImagenTabla, nombreArchivoTabla); err != nil {
@@ -259,7 +269,7 @@ func handleInterpreter(c *fiber.Ctx) error {
 
 	//Tabla de Errores
 	errors := errorListener.Errors
-	dotError := GenerateErrorDOT(errors)
+	dotError := GenerateErrorDOT(errors, Ast.Errores_Semanticos)
 	rutaImagenError := "C:\\Users\\Usuario\\Documents\\OLC2_P2_201906085\\Server_OLC2\\imagenes"
 	nombreArchivoError := "errores"
 
