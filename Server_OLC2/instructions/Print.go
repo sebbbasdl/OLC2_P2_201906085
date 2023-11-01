@@ -21,7 +21,7 @@ func NewPrint(lin int, col int, val interface{}) Print {
 func (p Print) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Generator) interface{} {
 	var result environment.Value
 	result = p.Value.(interfaces.Expression).Ejecutar(ast, env, gen)
-	fmt.Println(result.Type)
+	fmt.Println("TYPE----", result.Type)
 	if result.Type == environment.INTEGER || result.Type == environment.ARRAY {
 		gen.AddPrintf("d", "(int)"+fmt.Sprintf("%v", result.Value))
 		gen.AddPrintf("c", "10")
@@ -93,6 +93,29 @@ func (p Print) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Ge
 			//gen.AddComment("FIN Concatenacion string")
 			gen.Concat = false
 			gen.Temp_Concat = ""
+		} else if gen.Temporales_print != nil {
+			aux := gen.Temporales_print
+			if aux[0][1] == "string" {
+				gen.GeneratePrintString()
+				//agregar codigo en el main
+				newTemp1 := gen.NewTemp()
+				newTemp2 := gen.NewTemp()
+				size := strconv.Itoa(env.(environment.Environment).Size["size"])
+				gen.AddExpression(newTemp1, "P", size, "+")     //nuevo temporal en pos vacia
+				gen.AddExpression(newTemp1, newTemp1, "1", "+") //se deja espacio de retorno
+				gen.AddSetStack("(int)"+newTemp1, result.Value) //se coloca string en parametro que se manda
+				gen.AddExpression("P", "P", size, "+")          // cambio de entorno
+				gen.AddCall("dbrust_printString")               //Llamada
+				gen.AddGetStack(newTemp2, "(int)P")             //obtencion retorno
+				gen.AddExpression("P", "P", size, "-")          //regreso del entorno
+				gen.AddPrintf("d", "("+aux[1][1]+")"+aux[1][0])
+				gen.Code = append(gen.Code, ("printf(\"%c\",10);\n")) //salto de linea
+
+				gen.AddBr()
+			} else if aux[1][1] == "string" {
+
+			}
+			gen.Temporales_print = nil
 		} else {
 			gen.GeneratePrintString()
 			//agregar codigo en el main
@@ -112,6 +135,9 @@ func (p Print) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Ge
 		}
 
 		//println(gen.Concat)
+	} else if result.Type == environment.FUNC {
+		gen.AddPrintf("c", "10")
+		gen.AddBr()
 	}
 
 	return nil

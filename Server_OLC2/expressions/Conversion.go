@@ -32,19 +32,27 @@ func (o Conversion) Ejecutar(ast *environment.AST, env interface{}, gen *generat
 			gen.AddComment("Conversion")
 			//valor := expr.Value
 			fmt.Println("EXPRRR", o.valor_str)
-			valor := strings.Trim(o.valor_str, "\"")
+			if o.valor_str[0] != '"' {
+				variable := env.(environment.Environment).GetVariable(o.valor_str)
 
-			intValue, err := strconv.Atoi(valor)
+				fmt.Println("conversion: ", variable)
+				fmt.Println("conversion expresoin: ", expr.Value)
+				result = environment.NewValue(expr.Value, true, o.Tipo)
+			} else {
+				valor := strings.Trim(o.valor_str, "\"")
 
-			if err != nil {
-				// Manejar el error aquí, por ejemplo, imprimir un mensaje de error
-				fmt.Println("Error al convertir a entero:", err)
-				// Puedes decidir qué hacer en caso de error, por ejemplo, devolver un valor predeterminado
-				ast.SetError("Hubo un error en la conversion de int a String")
-				return environment.Value{IntValue: 0}
+				intValue, err := strconv.Atoi(valor)
+
+				if err != nil {
+					// Manejar el error aquí, por ejemplo, imprimir un mensaje de error
+					fmt.Println("Error al convertir a entero:", err)
+					// Puedes decidir qué hacer en caso de error, por ejemplo, devolver un valor predeterminado
+					ast.SetError("Hubo un error en la conversion de int a String")
+					return environment.Value{IntValue: 0}
+
+				}
+				result = environment.NewValue(fmt.Sprintf("%v", intValue), false, o.Tipo)
 			}
-
-			result = environment.NewValue(fmt.Sprintf("%v", intValue), false, o.Tipo)
 
 			return result
 		}
@@ -75,7 +83,7 @@ func (o Conversion) Ejecutar(ast *environment.AST, env interface{}, gen *generat
 			gen.AddSetHeap("(int)H", "-1")
 			gen.AddExpression("H", "H", "1", "+")
 			gen.AddBr()
-			
+
 			result = environment.NewValue(newTemp, true, o.Tipo)
 
 			return result

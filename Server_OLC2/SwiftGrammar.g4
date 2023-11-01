@@ -44,9 +44,11 @@ instruction returns [interfaces.Instruction inst]
 | structCreation { $inst = $structCreation.dec }
 | whilestmt { $inst = $whilestmt.whiles }
 | forstmt { $inst = $forstmt.fors }
+| guardtmt { $inst = $guardtmt.guard }
 | switchtmt { $inst = $switchtmt.swtch }
 | breaktmt { $inst = $breaktmt.break }
 | continuetmt{ $inst = $continuetmt.continue }
+
 ;
 
 structCreation returns[interfaces.Instruction dec]
@@ -154,6 +156,10 @@ forstmt returns [interfaces.Instruction fors]
 : FOR ID IN e1 = expr PUNTO PUNTO PUNTO e2=expr LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $ID.text, $e1.e,$e2.e,"nil", $block.blk) }
 | FOR GUIONB IN e1 = expr PUNTO PUNTO PUNTO e2=expr LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $GUIONB.text, $e1.e,$e2.e,"nil", $block.blk) }
 | FOR ID IN ope = (STRING|ID) LLAVEIZQ block LLAVEDER { $fors = instructions.NewFor($FOR.line, $FOR.pos, $ID.text, nil,nil, $ope.text ,$block.blk ) }
+;
+
+guardtmt returns [interfaces.Instruction guard]
+: GUARD expr ELSE LLAVEIZQ block LLAVEDER {$guard = instructions.NewGuard( $GUARD.line, $GUARD.pos, $expr.e, $block.blk )}
 ;
 
 breaktmt returns [interfaces.Instruction break]

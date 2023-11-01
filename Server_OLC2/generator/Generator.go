@@ -5,33 +5,36 @@ import (
 )
 
 type Generator struct {
-	Temporal        int
-	Label           int
-	Code            []interface{}
-	FinalCode       []interface{}
-	Natives         []interface{}
-	FuncCode        []interface{}
-	TempList        []interface{}
-	PrintStringFlag bool
-	BreakLabel      string
-	ContinueLabel   string
-	MainCode        bool
-	Concat          bool
-	Temp_Concat     string
-	ConcatFlag      bool
-	Temp_Label1     string
-	Temp_Label2     string
-	Temp_Case       int
-	Temp_Case2      int
-	Temp_Case_ifs   string
-	Block_Cases     []interface{}
-	Labels_Cases    []string
-	Temp_Default    string
-	Label_Break     string
-	Breakbool       bool
-	ContinueBool    bool
-	Labelret_for    string
-	Cont_case       int
+	Temporal             int
+	Label                int
+	Code                 []interface{}
+	FinalCode            []interface{}
+	Natives              []interface{}
+	FuncCode             []interface{}
+	TempList             []interface{}
+	PrintStringFlag      bool
+	BreakLabel           string
+	ContinueLabel        string
+	MainCode             bool
+	Concat               bool
+	Temp_Concat          string
+	ConcatFlag           bool
+	Temp_Label1          string
+	Temp_Label2          string
+	Temp_Case            int
+	Temp_Case2           int
+	Temp_Case_ifs        string
+	Block_Cases          []interface{}
+	Labels_Cases         []string
+	Temp_Default         string
+	Label_Break          string
+	Breakbool            bool
+	ContinueBool         bool
+	ReturnBool            bool
+	Labelret_for         string
+	Cont_case            int
+	bool_cast_int_string bool
+	Temporales_print     [][]string
 }
 
 func NewGenerator() Generator {
@@ -345,5 +348,92 @@ func (g *Generator) AddConcatString() {
 		}
 		g.ConcatFlag = false
 	}
+
+}
+
+func (g *Generator) casteo_int_string() {
+	if g.bool_cast_int_string {
+
+		t14 := g.NewTemp()
+		t15 := g.NewTemp()
+		t16 := g.NewTemp()
+		t17 := g.NewTemp()
+		t18 := g.NewTemp()
+		t19 := g.NewTemp()
+		t20 := g.NewTemp()
+
+		l11 := g.NewLabel()
+		l12 := g.NewLabel()
+		l13 := g.NewLabel()
+		l14 := g.NewLabel()
+		l15 := g.NewLabel()
+		l16 := g.NewLabel()
+		l17 := g.NewLabel()
+		l18 := g.NewLabel()
+		l19 := g.NewLabel()
+		l20 := g.NewLabel()
+		l21 := g.NewLabel()
+		l22 := g.NewLabel()
+		l23 := g.NewLabel()
+
+		g.Natives = append(g.Natives, "void casteo_int_string() {\n")
+		g.Natives = append(g.Natives, t14+" = H ;")
+		g.Natives = append(g.Natives, t15+" = P + 1;")
+		g.Natives = append(g.Natives, t16+" = stack[int]t15;")
+		g.Natives = append(g.Natives, "if( "+t16+" == 0 goto "+l22+" ;")
+		g.Natives = append(g.Natives, "goto "+l23+";")
+		g.Natives = append(g.Natives, l22+" :")
+		g.Natives = append(g.Natives, "heap[(int)H] = 48 ;")
+		g.Natives = append(g.Natives, "H = H + 1 ;")
+		g.Natives = append(g.Natives, l23+":")
+		g.Natives = append(g.Natives, "if( "+t16+" < 0 goto "+l20+" ;")
+		g.Natives = append(g.Natives, "goto "+l21+" ;")
+		g.Natives = append(g.Natives, l20+":")
+		g.Natives = append(g.Natives, "heap[(int)H] = 45")
+		g.Natives = append(g.Natives, "H = H + 1 ;")
+		g.Natives = append(g.Natives, t16+" = "+"0 "+" - "+t16+";")
+		g.Natives = append(g.Natives, l21+":")
+		g.Natives = append(g.Natives, t17+"= 0 ;")
+		g.Natives = append(g.Natives, l13+":")
+		g.Natives = append(g.Natives, "if("+t16+" > 0) goto "+l11+" ;")
+		g.Natives = append(g.Natives, "goto "+l12+"; ")
+		g.Natives = append(g.Natives, l11+":")
+		g.Natives = append(g.Natives, t17+" = "+t17+" * 10 ;")
+		g.Natives = append(g.Natives, t18+" = (int)"+t16+" % 10 ;")
+		g.Natives = append(g.Natives, t17+" = "+t17+" + "+t18+";")
+		g.Natives = append(g.Natives, "if("+t17+"== 0) goto "+l16+";")
+		g.Natives = append(g.Natives, "goto "+l17+";")
+		g.Natives = append(g.Natives, l16+":")
+		g.Natives = append(g.Natives, t20+" = "+t20+" + 1 ;")
+		g.Natives = append(g.Natives, l17+":")
+		g.Natives = append(g.Natives, t16+" = (int)"+t16+" / 10;")
+		g.Natives = append(g.Natives, "goto "+l13+";")
+		g.Natives = append(g.Natives, l12+":")
+		g.Natives = append(g.Natives, "if(+"+t17+"> 0) goto "+l14+";")
+		g.Natives = append(g.Natives, "goto "+l15+";")
+		g.Natives = append(g.Natives, l14+":")
+		g.Natives = append(g.Natives, t19+" = (int)"+t17+" % 10;")
+		g.Natives = append(g.Natives, t19+" = "+t19+" + 48;")
+		g.Natives = append(g.Natives, "heap[(int)H] = "+t19+";")
+		g.Natives = append(g.Natives, "H = H + 1;")
+		g.Natives = append(g.Natives, t17+" = (int)"+t17+" / 10;")
+		g.Natives = append(g.Natives, "goto "+l12+";")
+		g.Natives = append(g.Natives, l15+":")
+		g.Natives = append(g.Natives, "if("+t20+" > 0) goto "+l18+";")
+		g.Natives = append(g.Natives, "goto "+l19+";")
+		g.Natives = append(g.Natives, l18+":")
+		g.Natives = append(g.Natives, "heap[(int)H] = 48;")
+		g.Natives = append(g.Natives, "H = H + 1;")
+		g.Natives = append(g.Natives, t20+" = "+t20+" - 1;")
+		g.Natives = append(g.Natives, "goto "+l15+";")
+		g.Natives = append(g.Natives, l19+":")
+		g.Natives = append(g.Natives, "heap[(int)H] = -1;")
+		g.Natives = append(g.Natives, "H = H + 1;")
+		g.Natives = append(g.Natives, "stack[(int)P] ="+t14+";")
+		g.Natives = append(g.Natives, "return;")
+
+		g.FuncCode = append(g.FuncCode, "\tcasteo_int_string();\n")
+	}
+	g.bool_cast_int_string = false
 
 }

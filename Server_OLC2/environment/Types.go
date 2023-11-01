@@ -10,4 +10,5 @@ const (
 	NULL                         //4
 	ARRAY                        //5
 	STRUCT                       //6
+	FUNC                         //7
 )

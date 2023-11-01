@@ -2,6 +2,5 @@ digraph ErrorTable {
   node [shape=none fontname=Helvetica]
   n1 [label = <<table>
     <tr><td colspan="4" bgcolor="Peru">Errores</td></tr>
-    <tr><td bgcolor="orange">Tipo</td><td bgcolor="orange">Línea</td><td bgcolor="orange">Columna</td><td bgcolor="orange">Mensaje</td></tr>    <tr><td>Semantico</td><td>6</td><td>1</td><td>No es posible sumar</td></tr>
-  </table>> ]
+    <tr><td bgcolor="orange">Tipo</td><td bgcolor="orange">Línea</td><td bgcolor="orange">Columna</td><td bgcolor="orange">Mensaje</td></tr>  </table>> ]
 }

@@ -58,6 +58,8 @@ func (p CallExp) Ejecutar(ast *environment.AST, env interface{}, gen *generator.
 
 	}
 	gen.AddComment("Final de llamada")
+	fmt.Println("Funcionnnn", result)
+	result.Type = environment.FUNC
 	return result
 }
 

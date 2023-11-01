@@ -61,50 +61,62 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 				result.IntValue = op1.IntValue + op2.IntValue
 				print("int: ")
 				println(result.IntValue)
+				
 				return result
 			} else if dominante == environment.STRING {
-				/*var val = */ gen.AddConcatString( /*newTemp, op1.Value, op2.Value*/ )
-				println("--------Conca")
 
-				gen.Concat = true
+				if op1.Type == environment.STRING && op2.Type == environment.INTEGER {
 
-				println(gen.Concat)
-				temp1 := gen.NewTemp() //12
-				temp2 := gen.NewTemp() //13
-				temp3 := gen.NewTemp() //14
-				//var result1 string
-				/*for i := 0; i < len(op1.Value); i++ {
-					result1 +=
+					data := []string{op1.Value, "string"}
+					data2 := []string{op2.Value, "int"}
+					gen.Temporales_print = append(gen.Temporales_print, data)
+					gen.Temporales_print = append(gen.Temporales_print, data2)
+					result = environment.NewValue(op1.Value, true, dominante)
+				} else {
+					gen.AddConcatString()
+					println("--------Conca")
+
+					gen.Concat = true
+
+					println(gen.Concat)
+					temp1 := gen.NewTemp() //12
+					temp2 := gen.NewTemp() //13
+					temp3 := gen.NewTemp() //14
+					//var result1 string
+					/*for i := 0; i < len(op1.Value); i++ {
+						result1 +=
+					}
+
+					for i := 0; i < len(op2.Value); i++ {
+
+					}*/
+					result1 := string(op1.Value)
+					result2 := string(op2.Value)
+					if gen.Temp_Concat != "" {
+						println("si entre siuuu")
+						result1 = gen.Temp_Concat
+					}
+					size := strconv.Itoa(env.(environment.Environment).Size["size"])
+					gen.AddComment("Concatenacion en suma string----INICIO")
+					gen.AddExpression("P", "P", size, "+")
+					gen.AddExpression(temp1, "P", "1", "+")
+					gen.AddSetStack("(int)"+temp1, result1)
+					gen.AddExpression(temp2, "P", "2", "+")
+					gen.AddSetStack("(int)"+temp2, result2)
+					gen.AddCall("concatenar_strings")
+					gen.AddGetStack(temp3, "(int)P")
+
+					gen.AddExpression("P", "P", size, "-")
+					gen.AddComment("Concatenacion en suma string---FIN")
+
+					gen.Temp_Concat = temp3
+
+					println("result 1 : ", gen.Temp_Concat)
+					//fmt.Println(val)
+					result = environment.NewValue(op1.Value+op2.Value, true, dominante)
+					fmt.Println(result)
 				}
 
-				for i := 0; i < len(op2.Value); i++ {
-
-				}*/
-				result1 := string(op1.Value)
-				result2 := string(op2.Value)
-				if gen.Temp_Concat != "" {
-					println("si entre siuuu")
-					result1 = gen.Temp_Concat
-				}
-				size := strconv.Itoa(env.(environment.Environment).Size["size"])
-				gen.AddComment("Concatenacion en suma string----INICIO")
-				gen.AddExpression("P", "P", size, "+")
-				gen.AddExpression(temp1, "P", "1", "+")
-				gen.AddSetStack("(int)"+temp1, result1)
-				gen.AddExpression(temp2, "P", "2", "+")
-				gen.AddSetStack("(int)"+temp2, result2)
-				gen.AddCall("concat_string_proc")
-				gen.AddGetStack(temp3, "(int)P")
-
-				gen.AddExpression("P", "P", size, "-")
-				gen.AddComment("Concatenacion en suma string---FIN")
-
-				gen.Temp_Concat = temp3
-
-				println("result 1 : ", gen.Temp_Concat)
-				//fmt.Println(val)
-				result = environment.NewValue(op1.Value+op2.Value, true, dominante)
-				fmt.Println(result)
 				return result
 			} else {
 				ast.SetError("ERROR: No es posible sumar")
