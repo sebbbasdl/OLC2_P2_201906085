@@ -30,7 +30,8 @@ type Generator struct {
 	Label_Break          string
 	Breakbool            bool
 	ContinueBool         bool
-	ReturnBool            bool
+	ReturnBool           bool
+	Auxbool              bool
 	Labelret_for         string
 	Cont_case            int
 	bool_cast_int_string bool

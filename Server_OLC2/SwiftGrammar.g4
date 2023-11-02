@@ -48,6 +48,7 @@ instruction returns [interfaces.Instruction inst]
 | switchtmt { $inst = $switchtmt.swtch }
 | breaktmt { $inst = $breaktmt.break }
 | continuetmt{ $inst = $continuetmt.continue }
+| returntmt { $inst = $returntmt.ret }
 
 ;
 
@@ -165,6 +166,11 @@ guardtmt returns [interfaces.Instruction guard]
 breaktmt returns [interfaces.Instruction break]
 : BREAK { $break = instructions.NewBreak($BREAK.line, $BREAK.pos)}
 ;
+
+returntmt returns [ interfaces.Instruction ret]
+: RETURN expr {  $ret = instructions.NewReturn($RETURN.line, $RETURN.pos, $expr.e)  }
+;
+
 
 continuetmt returns [interfaces.Instruction continue]
 : CONTINUE { $continue = instructions.NewContinue($CONTINUE.line, $CONTINUE.pos)}

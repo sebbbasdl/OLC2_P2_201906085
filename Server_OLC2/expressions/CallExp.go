@@ -25,8 +25,10 @@ func (p CallExp) Ejecutar(ast *environment.AST, env interface{}, gen *generator.
 	var result environment.Value
 	size := env.(environment.Environment).Size["size"]
 	gen.AddComment("Inicio de llamada")
+	tmp4 := gen.NewTemp()
+	tmp1 := gen.NewTemp()
 	if len(p.Params) > 0 {
-		tmp1 := gen.NewTemp()
+
 		gen.AddExpression(tmp1, "P", strconv.Itoa(size+1), "+")
 		for i := 0; i < len(p.Params); i++ {
 
@@ -49,7 +51,6 @@ func (p CallExp) Ejecutar(ast *environment.AST, env interface{}, gen *generator.
 		gen.AddExpression("P", "P", strconv.Itoa(size), "-")
 
 	} else {
-		tmp1 := gen.NewTemp()
 
 		gen.AddExpression("P", "P", strconv.Itoa(size), "+")
 		gen.AddCall(p.Id)
@@ -57,9 +58,16 @@ func (p CallExp) Ejecutar(ast *environment.AST, env interface{}, gen *generator.
 		gen.AddExpression("P", "P", strconv.Itoa(size), "-")
 
 	}
+	
+	gen.AddExpression(tmp1, "P", "1", "+")
+	gen.AddGetStack(tmp4, "(int)"+tmp1)
+
+
+
 	gen.AddComment("Final de llamada")
 	fmt.Println("Funcionnnn", result)
-	result.Type = environment.FUNC
+	//result.Type = environment.FUNC
+	result = environment.NewValue(tmp1, true, environment.INTEGER)
 	return result
 }
 

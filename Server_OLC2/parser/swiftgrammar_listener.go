@@ -64,6 +64,9 @@ type SwiftGrammarListener interface {
 	// EnterBreaktmt is called when entering the breaktmt production.
 	EnterBreaktmt(c *BreaktmtContext)
 
+	// EnterReturntmt is called when entering the returntmt production.
+	EnterReturntmt(c *ReturntmtContext)
+
 	// EnterContinuetmt is called when entering the continuetmt production.
 	EnterContinuetmt(c *ContinuetmtContext)
 
@@ -147,6 +150,9 @@ type SwiftGrammarListener interface {
 
 	// ExitBreaktmt is called when exiting the breaktmt production.
 	ExitBreaktmt(c *BreaktmtContext)
+
+	// ExitReturntmt is called when exiting the returntmt production.
+	ExitReturntmt(c *ReturntmtContext)
 
 	// ExitContinuetmt is called when exiting the continuetmt production.
 	ExitContinuetmt(c *ContinuetmtContext)

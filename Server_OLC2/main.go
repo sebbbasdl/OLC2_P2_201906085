@@ -260,7 +260,7 @@ func handleInterpreter(c *fiber.Ctx) error {
 		fmt.Println("Error al generar el archivo DOT:", err)
 		//return nil
 	}
-
+	
 	// Llama a la función generarImagen para crear la imagen PNG a partir del archivo DOT
 	if err := generarImagen(rutaImagenTabla+"/"+nombreArchivoTabla+".dot", rutaImagenTabla, nombreArchivoTabla); err != nil {
 		fmt.Println("Error al generar la imagen Tabla:", err)

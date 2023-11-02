@@ -58,6 +58,16 @@ func (p Function) Ejecutar(ast *environment.AST, env interface{}, gen *generator
 	for _, s := range p.Bloque {
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, envFunc, gen)
+			if gen.ReturnBool {
+				gen.AddComment("Return")
+
+				out := gen.NewLabel()
+				//gen.AddGoto(out)
+				gen.AddLabel(out)
+				//OutLvls = append(OutLvls, out)
+				gen.ReturnBool = false
+				//break
+			}
 			if resInst != nil {
 				//agregando etiquetas de salida
 				for _, lvl := range resInst.(environment.Value).OutLabel {

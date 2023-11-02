@@ -32,56 +32,65 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 
 	newLabel := gen.NewLabel()
 	//*****************************************add true labels
-
 	for _, lvl := range condicion.TrueLabel {
 
 		gen.AddLabel(lvl.(string))
 	}
-	//instrucciones if
-	for _, s := range p.Bloque {
-		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
-			resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
-			if gen.Breakbool == true {
-				gen.AddComment("BREAK")
-				out := gen.NewLabel()
-				gen.AddGoto(out)
-				OutLvls = append(OutLvls, out)
-				gen.Breakbool = false
-				//break
-			}
-			if gen.ContinueBool == true {
-				gen.AddComment("Continue")
+	if p.Bloque != nil {
 
-				gen.AddGoto(gen.Labelret_for)
+		//instrucciones if
 
-				gen.ContinueBool = false
-				//break
-			}
-			if resInst != nil {
-				//agregando etiquetas de salida
-				for _, lvl := range resInst.(environment.Value).OutLabel {
-					OutLvls = append(OutLvls, lvl)
+		for _, s := range p.Bloque {
+			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
+				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
+				
+				if gen.Breakbool == true {
+					gen.AddComment("BREAK")
+					out := gen.NewLabel()
+					gen.AddGoto(out)
+					OutLvls = append(OutLvls, out)
+					gen.Breakbool = false
+					//break
 				}
+				if gen.ContinueBool == true {
+					gen.AddComment("Continue")
+
+					gen.AddGoto(gen.Labelret_for)
+
+					gen.ContinueBool = false
+					//break
+				}
+				if resInst != nil {
+					//agregando etiquetas de salida
+					for _, lvl := range resInst.(environment.Value).OutLabel {
+						OutLvls = append(OutLvls, lvl)
+					}
+				}
+			} else {
+				fmt.Println("Error en bloque")
 			}
-		} else {
-			fmt.Println("Error en bloque")
 		}
+		gen.AddGoto(newLabel)
+		gen.AddComment("False labels")
+		for _, lvl := range condicion.FalseLabel {
+			gen.AddLabel(lvl.(string))
+		}
+		//OutLvls = append(OutLvls, newLabel)
+		
+
 	}
+
 	//*****************************************add out labels
-	gen.AddComment("out labels")
-	gen.AddGoto(newLabel)
-	println("Soy label 1", newLabel)
 
 	//*****************************************add false labels
-	gen.AddComment("False labels")
-	for _, lvl := range condicion.FalseLabel {
-		gen.AddLabel(lvl.(string))
-	}
-	gen.AddComment("False labels")
 
 	gen.AddComment("Comienza ElseIF")
 	//newLabel2 := gen.NewLabel()
 	if p.ElseIfBlock != nil {
+		/*for _, lvl := range condicion.TrueLabel {
+
+			gen.AddLabel(lvl.(string))
+		}*/
 		println("-------------ENTRE A ELSE IFFFF---------")
 		for _, s := range p.ElseIfBlock {
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
@@ -96,6 +105,11 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 				fmt.Println("Error en bloque")
 			}
 		}
+		gen.AddComment("False labels")
+		/*for _, lvl := range condicion.FalseLabel {
+			gen.AddLabel(lvl.(string))
+			println("Etiquetas Falsas ", lvl.(string))
+		}*/
 	}
 	//gen.AddComment("out labels2")
 	//gen.AddGoto(newLabel2)
@@ -104,12 +118,12 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 	gen.AddComment("FIN ElseIF")
 
 	//*****************************************add false labels
-	gen.AddComment("False labels")
-	/*for _, lvl := range condicion.FalseLabel {
+	/*gen.AddComment("False labels")
+	for _, lvl := range condicion.FalseLabel {
 		gen.AddLabel(lvl.(string))
-		println("Etiquetas Falsas ", lvl.(string))
-	}*/
+	}
 	gen.AddComment("False labels")
+	gen.AddComment("False labels")*/
 
 	gen.AddComment("Comienza Else")
 	//newLabel3 := gen.NewLabel()
@@ -133,8 +147,11 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 	gen.AddComment("out labels2")
 	//gen.AddGoto(newLabel3)
 	gen.AddComment("FIN Else")
-	//OutLvls = append(OutLvls, newLabel)
-	gen.AddLabel(newLabel)
+	OutLvls = append(OutLvls, newLabel)
+	gen.AddComment("out labels")
+	//gen.AddGoto(newLabel)
+	println("Soy label 1", newLabel)
+	//gen.AddLabel(newLabel)
 	//OutLvls = append(OutLvls, newLabel2)
 	//OutLvls = append(OutLvls, newLabel3)
 	fmt.Println("---------------------->>>>>>>", OutLvls)
