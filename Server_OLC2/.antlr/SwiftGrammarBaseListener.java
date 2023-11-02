@@ -95,18 +95,6 @@ public class SwiftGrammarBaseListener implements SwiftGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCallFunctionInst(SwiftGrammarParser.CallFunctionInstContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCallFunctionInst(SwiftGrammarParser.CallFunctionInstContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterListParamsFunc(SwiftGrammarParser.ListParamsFuncContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -239,18 +227,6 @@ public class SwiftGrammarBaseListener implements SwiftGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGuardtmt(SwiftGrammarParser.GuardtmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGuardtmt(SwiftGrammarParser.GuardtmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBreaktmt(SwiftGrammarParser.BreaktmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -258,18 +234,6 @@ public class SwiftGrammarBaseListener implements SwiftGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBreaktmt(SwiftGrammarParser.BreaktmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReturntmt(SwiftGrammarParser.ReturntmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReturntmt(SwiftGrammarParser.ReturntmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

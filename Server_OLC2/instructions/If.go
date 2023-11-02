@@ -43,15 +43,8 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 		for _, s := range p.Bloque {
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
-				if gen.ReturnBool {
-					gen.AddComment("Return if")
-					out := gen.NewLabel()
-					gen.AddGoto(out)
-					OutLvls = append(OutLvls, out)
-					gen.ReturnBool = false
-					//break
-				}
-				if gen.Breakbool {
+				
+				if gen.Breakbool == true {
 					gen.AddComment("BREAK")
 					out := gen.NewLabel()
 					gen.AddGoto(out)
@@ -59,7 +52,7 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 					gen.Breakbool = false
 					//break
 				}
-				if gen.ContinueBool {
+				if gen.ContinueBool == true {
 					gen.AddComment("Continue")
 
 					gen.AddGoto(gen.Labelret_for)
@@ -83,6 +76,7 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 			gen.AddLabel(lvl.(string))
 		}
 		//OutLvls = append(OutLvls, newLabel)
+		
 
 	}
 
@@ -101,14 +95,6 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 		for _, s := range p.ElseIfBlock {
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
-				if gen.ReturnBool {
-					gen.AddComment("Return elseif")
-					out := gen.NewLabel()
-					gen.AddGoto(out)
-					OutLvls = append(OutLvls, out)
-					gen.ReturnBool = false
-					//break
-				}
 				if resInst != nil {
 					//agregando etiquetas de salida
 					for _, lvl := range resInst.(environment.Value).OutLabel {
@@ -147,14 +133,6 @@ func (p If) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Gener
 		for _, s := range p.ElseBlock {
 			if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 				resInst := s.(interfaces.Instruction).Ejecutar(ast, env, gen)
-				if gen.ReturnBool {
-					gen.AddComment("Return else")
-					out := gen.NewLabel()
-					gen.AddGoto(out)
-					OutLvls = append(OutLvls, out)
-					gen.ReturnBool = false
-					//break
-				}
 				if resInst != nil {
 					//agregando etiquetas de salida
 					for _, lvl := range resInst.(environment.Value).OutLabel {

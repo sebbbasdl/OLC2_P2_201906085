@@ -59,9 +59,10 @@ func (p Function) Ejecutar(ast *environment.AST, env interface{}, gen *generator
 		if strings.Contains(fmt.Sprintf("%T", s), "instructions") {
 			resInst := s.(interfaces.Instruction).Ejecutar(ast, envFunc, gen)
 			if gen.ReturnBool {
+				gen.AddComment("Return")
 
 				out := gen.NewLabel()
-				gen.AddGoto(out)
+				//gen.AddGoto(out)
 				gen.AddLabel(out)
 				//OutLvls = append(OutLvls, out)
 				gen.ReturnBool = false
