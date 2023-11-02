@@ -56,6 +56,12 @@ func (s *BaseSwiftGrammarListener) EnterFunction(ctx *FunctionContext) {}
 // ExitFunction is called when production function is exited.
 func (s *BaseSwiftGrammarListener) ExitFunction(ctx *FunctionContext) {}
 
+// EnterCallFunctionInst is called when production callFunctionInst is entered.
+func (s *BaseSwiftGrammarListener) EnterCallFunctionInst(ctx *CallFunctionInstContext) {}
+
+// ExitCallFunctionInst is called when production callFunctionInst is exited.
+func (s *BaseSwiftGrammarListener) ExitCallFunctionInst(ctx *CallFunctionInstContext) {}
+
 // EnterListParamsFunc is called when production listParamsFunc is entered.
 func (s *BaseSwiftGrammarListener) EnterListParamsFunc(ctx *ListParamsFuncContext) {}
 

@@ -49,6 +49,7 @@ instruction returns [interfaces.Instruction inst]
 | breaktmt { $inst = $breaktmt.break }
 | continuetmt{ $inst = $continuetmt.continue }
 | returntmt { $inst = $returntmt.ret }
+| callFunctionInst { $inst = $callFunctionInst.cfi }
 
 ;
 
@@ -83,6 +84,10 @@ function returns [ interfaces.Instruction fun ]
 }
 ;
 
+callFunctionInst returns[interfaces.Instruction cfi]
+: ID PARIZQ listParams PARDER { $cfi = instructions.NewCall_Function($ID.line, $ID.pos, $ID.text, $listParams.l) }
+;
+
 listParamsFunc returns[[]interface{} lpf]
 : list=listParamsFunc COMA ID D_PTS types {
     var arr []interface{}
@@ -91,6 +96,17 @@ listParamsFunc returns[[]interface{} lpf]
     $lpf = arr
     }
 | ID D_PTS types {
+    $lpf = []interface{}{}
+    newParam := instructions.NewParamsDeclaration($ID.line, $ID.pos, $ID.text, $types.ty)
+    $lpf = append($lpf, newParam)
+    }
+| list=listParamsFunc COMA GUIONB ID D_PTS types {
+    var arr []interface{}
+    newParam := instructions.NewParamsDeclaration($ID.line, $ID.pos, $ID.text, $types.ty)
+    arr = append($list.lpf, newParam)
+    $lpf = arr
+    }
+| GUIONB ID D_PTS types {
     $lpf = []interface{}{}
     newParam := instructions.NewParamsDeclaration($ID.line, $ID.pos, $ID.text, $types.ty)
     $lpf = append($lpf, newParam)

@@ -244,7 +244,7 @@ func handleInterpreter(c *fiber.Ctx) error {
 			ConsoleOut += item.(string)
 		}
 	} else {
-		ConsoleOut = Ast.GetErrors()
+		ConsoleOut = Ast.GetErrors()	
 	}
 	response := Resp{
 		Output:  ConsoleOut,

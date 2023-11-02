@@ -22,6 +22,7 @@ func (p Print) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Ge
 	var result environment.Value
 	result = p.Value.(interfaces.Expression).Ejecutar(ast, env, gen)
 	fmt.Println("TYPE----", result.Type)
+	fmt.Println("HOLASIUUUUUU", result)
 	if result.Type == environment.INTEGER || result.Type == environment.ARRAY {
 		gen.AddPrintf("d", "(int)"+fmt.Sprintf("%v", result.Value))
 		gen.AddPrintf("c", "10")

@@ -74,6 +74,16 @@ public interface SwiftGrammarListener extends ParseTreeListener {
 	 */
 	void exitFunction(SwiftGrammarParser.FunctionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#callFunctionInst}.
+	 * @param ctx the parse tree
+	 */
+	void enterCallFunctionInst(SwiftGrammarParser.CallFunctionInstContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#callFunctionInst}.
+	 * @param ctx the parse tree
+	 */
+	void exitCallFunctionInst(SwiftGrammarParser.CallFunctionInstContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SwiftGrammarParser#listParamsFunc}.
 	 * @param ctx the parse tree
 	 */
@@ -184,6 +194,16 @@ public interface SwiftGrammarListener extends ParseTreeListener {
 	 */
 	void exitForstmt(SwiftGrammarParser.ForstmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#guardtmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterGuardtmt(SwiftGrammarParser.GuardtmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#guardtmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitGuardtmt(SwiftGrammarParser.GuardtmtContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SwiftGrammarParser#breaktmt}.
 	 * @param ctx the parse tree
 	 */
@@ -193,6 +213,16 @@ public interface SwiftGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBreaktmt(SwiftGrammarParser.BreaktmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SwiftGrammarParser#returntmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturntmt(SwiftGrammarParser.ReturntmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SwiftGrammarParser#returntmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturntmt(SwiftGrammarParser.ReturntmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SwiftGrammarParser#continuetmt}.
 	 * @param ctx the parse tree

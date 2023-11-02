@@ -19,7 +19,8 @@ func NewReturn(lin int, col int, exp interfaces.Expression) Return {
 }
 
 func (p Return) Ejecutar(ast *environment.AST, env interface{}, gen *generator.Generator) interface{} {
-	//var result environment.Value
+	var result environment.Value
+	gen.AddComment("Return")
 	label := gen.NewLabel()
 	expr := p.Exp.Ejecutar(ast, env, gen)
 	gen.ReturnBool = true
@@ -38,14 +39,15 @@ func (p Return) Ejecutar(ast *environment.AST, env interface{}, gen *generator.G
 		gen.AddGoto(label)
 
 		fmt.Println("Returno: ", expr)
-		return expr
+
+		return result
 
 	} else {
-		gen.AddSetStack("(int)P", "0")
-		gen.AddLabel(label)
+		gen.AddSetStack("(int)P", expr.Value)
+		//gen.AddLabel(label)
 		gen.Auxbool = true
 		fmt.Println("Returno: ", expr)
-		return expr
+		return result
 	}
 
 	fmt.Println("Returno: ", expr)

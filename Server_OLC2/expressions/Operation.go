@@ -5,7 +5,6 @@ import (
 	"Server2/generator"
 	"Server2/interfaces"
 	"fmt"
-	"reflect"
 	"strconv"
 )
 
@@ -45,17 +44,16 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 	switch o.Operador {
 	case "+":
 		{
-			gen.AddComment("SOYYYYYYYYY")
 
+			op1 = o.Op_izq.Ejecutar(ast, env, gen)
 			op2 = o.Op_der.Ejecutar(ast, env, gen)
 			//validar tipo dominante
 			dominante = tabla_dominante[op1.Type][op2.Type]
 
-			gen.AddComment("SOYYYYYYYYY")
 			//valida el tipo
 
 			if dominante == environment.INTEGER || dominante == environment.FLOAT {
-				if a := reflect.TypeOf(o.Op_izq); a == reflect.TypeOf(CallExp{}) {
+				/*if a := reflect.TypeOf(o.Op_izq); a == reflect.TypeOf(CallExp{}) {
 					size := env.(environment.Environment).Size["size"]
 					gen.AddComment("SIZEEEEEE")
 					fmt.Println("SIZE :", size)
@@ -63,15 +61,18 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 					gen.AddExpression(t1, "P", strconv.Itoa(size), "+")
 					gen.AddSetStack("(int)"+op2.Value, t1)
 
-					gen.AddExpression(t1, "P", strconv.Itoa(size+1), "+")
-					op1 = o.Op_izq.Ejecutar(ast, env, gen)
-					gen.AddExpression(t1, "P", strconv.Itoa(size+1), "-")
+					gen.AddExpression(t1, "P", "1", "+")
+					gen.AddComment("hola")
+
+					gen.AddComment("hola")
+					gen.AddExpression(t1, "P", "1", "-")
 
 					t1 = gen.NewTemp()
-					gen.AddExpression(t1, "P", strconv.Itoa(size), "+")
+					gen.AddExpression(t1, "P", "1", "+")
 					gen.AddGetStack(op2.Value, "(int)"+t1)
 					gen.AddComment("SIZEEEEEE")
 					t2 := gen.NewTemp()
+
 					gen.AddExpression(t2, op1.Value, op2.Value, "+")
 					result.IntValue = op1.IntValue + op2.IntValue
 					return environment.NewValue(t2, true, dominante)
@@ -83,7 +84,6 @@ func (o Operation) Ejecutar(ast *environment.AST, env interface{}, gen *generato
 					dominante = tabla_dominante[op1.Type][op2.Type]
 					return environment.NewValue(t2, true, dominante)
 				}*/
-
 				fmt.Println(op1.Value)
 				fmt.Println(op2.Value)
 				gen.AddExpression(newTemp, op1.Value, op2.Value, "+")

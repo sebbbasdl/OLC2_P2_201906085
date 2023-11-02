@@ -25,6 +25,9 @@ type SwiftGrammarListener interface {
 	// EnterFunction is called when entering the function production.
 	EnterFunction(c *FunctionContext)
 
+	// EnterCallFunctionInst is called when entering the callFunctionInst production.
+	EnterCallFunctionInst(c *CallFunctionInstContext)
+
 	// EnterListParamsFunc is called when entering the listParamsFunc production.
 	EnterListParamsFunc(c *ListParamsFuncContext)
 
@@ -111,6 +114,9 @@ type SwiftGrammarListener interface {
 
 	// ExitFunction is called when exiting the function production.
 	ExitFunction(c *FunctionContext)
+
+	// ExitCallFunctionInst is called when exiting the callFunctionInst production.
+	ExitCallFunctionInst(c *CallFunctionInstContext)
 
 	// ExitListParamsFunc is called when exiting the listParamsFunc production.
 	ExitListParamsFunc(c *ListParamsFuncContext)
